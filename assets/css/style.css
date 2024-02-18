@@ -1,0 +1,233 @@
+#fplace-get-room-search, .fplace-red-btn{
+    color: #fff;
+    font-size: 20px;
+    background: #ed1c29;
+    border: 1px solid #ed1c29;
+    padding: 10px 25px;
+    border-radius: 30px;
+    margin-top: 30px;
+    transition: .4s;
+    cursor: pointer;
+}
+#fplace-get-room-search:hover, .fplace-red-btn:hover{
+   background: #1f59b0;
+   color: #fff;
+}
+.fplace-data-not-found {
+    text-align: center;
+}
+.fplace-data-not-found h3 {
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+.fplace-data-not-found .fplace-red-btn {
+    font-size: 18px;
+}
+
+#fplace-room-input {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+.fplace-section-heading {
+    text-align: center;
+    margin-bottom: 25px;
+}
+.fplace-booking-main-wrapper {
+    padding-bottom: 50px;
+    padding-top: 40px;
+}
+.fplace-room-search-area p {
+    margin-bottom: 0;
+}
+.fplace-arriving-departing {
+    box-shadow: 0px 0px 30px 0px rgb(0 0 0 / 20%);
+    background: #fff;
+    border-radius: 10px;
+    overflow: auto;
+    padding: 15px;
+    border: .5px solid #888888;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.fplace-query-date.departing{
+    margin-bottom: 0px;
+}
+.fplace-query-date.arriving{
+    margin-bottom: 7px;
+}
+.fplace-query-date {
+    color: #1f59b0;
+}
+.fplace-bold-text {
+    font-weight: 600;
+    margin-left: 10px;
+}
+.fplace-item-header {
+    padding: 10px 15px;
+    background: #1f59b0;
+    border-radius: 10px 10px 0 0;
+}
+.fplace-item-header h3 {
+    color: #fff;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 18px;
+    line-height: 27px;
+    font-weight: 600;
+}
+.fplace-proposed-booking-form-header{
+    padding: 10px 15px;
+    background: #ed1c29;
+    border-radius: 10px 10px 0 0;
+}
+.fplace-proposed-booking-form-header h4{
+    color: #fff;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 17px;
+    line-height: 25px;
+    font-weight: 600;
+}
+.fplace-room-wrapper {
+    background-color: #fff;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+}
+.fplace-room-info {
+    padding: 15px;
+}
+.fplace-room-info-wrapper {
+    padding: 15px;
+    display: flex;
+}
+.fplace-room-facilities {
+    width: 50%;
+}
+.fplace-room-book-info {
+    width: 50%;
+}
+.fplace-room-book-info-inner {
+    box-shadow: 0px 0px 20px 0px rgb(0 0 0 / 20%);
+    background: #fff;
+    border-radius: 10px;
+    overflow: auto;
+    padding: 15px;
+    border: 0.5px solid #888888;
+}
+a.fplace-book-btn {
+    color: #fff;
+    font-size: 16px;
+    background: #ed1c29;
+    border: 1px solid #ed1c29;
+    padding: 4px 20px;
+    border-radius: 30px;
+    transition: .4s;
+    cursor: pointer;
+    line-height: 25px;
+    display: inline-block;
+}
+a.fplace-book-btn:hover{
+    background: #1f59b0;
+}
+.fplace-pros_cons-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.fplace-pros_cons-item {
+    font-size: 16px;
+    display: flex;
+}
+.fplace-pros_cons-item .fplace-icons {
+    font-size: 15px;
+    margin-right: 10px;
+}
+.fplace-icons.notice {
+    color: #ed1c29;
+}
+.fplace-icons.check, .fplace-icons.parking {
+    color: rgb(11 196 110);
+}
+.fplace-room-book-info {
+    padding-left: 50px;
+}
+.fplace-room-book-info-icon {
+    color: #1f59b0;
+    margin-right: 10px;
+    display: inline-block;
+}
+input#fplace_price {
+    margin-right: 10px;
+}
+.fplace-room-book-info-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.fplace-room-book-info-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.fplace-room-book-info-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #ddd;
+    margin-top: 15px;
+    padding-top: 15px;
+}
+h4.fplace-total-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #666666;
+    margin-bottom: 0;
+}
+#flace_loading {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #666;
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s ease-in-out infinite;
+}
+  
+@keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+}
+.fplace-loader {
+    text-align: center;
+    margin-top: 70px;
+    margin-bottom: 30px;
+}
+.fplace-booking-item {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.fplace-proposed-booking-form {
+    padding: 20px;
+}
+.fplace-proposed-booking-form-container {
+    margin-top: 20px;
+}
+.fplace-booking-item-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+.fplace-booking-item-header h2 {
+    font-size: 25px;
+}
+.fplace-arriving-departing {
+    display: flex;
+    justify-content: center;
+}
