@@ -61,6 +61,7 @@ final class Francescas_Place {
 		$this->includes();
 
 		add_action('wp_enqueue_scripts', [$this, 'assets_enqueue'], 100);
+		add_action('admin_enqueue_scripts', [$this, 'admin_assets_enqueue'], 100); 
 	}
 
 	public function includes() {
@@ -70,7 +71,36 @@ final class Francescas_Place {
 		include_once( FPB_DIR_PATH . 'includes/classes/Helper.php' );
 		include_once( FPB_DIR_PATH . 'includes/metaboxes.php' );
 		include_once( FPB_DIR_PATH . 'includes/functions.php' );
+
+		if( is_admin() ){
+			include_once( FPB_DIR_PATH . 'admin/Fplace_Admin.php' );
+		}
     }
+
+	/**
+	 * Enqueue Admin assets.
+	 *
+	 * @return void
+	 */
+	public function admin_assets_enqueue(){
+		wp_enqueue_script(
+			'francescas-place-booking',
+			FPB_ASSETS . 'js/scripts.js',
+			['jquery'],
+			'1.0',
+			true
+		);
+
+		//Localize scripts
+		wp_localize_script(
+			'francescas-place-booking',
+			'fPlace',
+			[
+				'ajax_url' => admin_url('admin-ajax.php'),
+				'nonce'    => wp_create_nonce('francescas_place_booking'),
+			]
+		);
+	}
 
 	/**
 	 * Enqueue frontend assets.

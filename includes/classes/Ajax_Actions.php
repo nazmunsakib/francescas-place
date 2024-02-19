@@ -16,8 +16,8 @@ class Ajax_Actions{
         add_action('wp_ajax_fplace_search_room', [$this, 'fplace_search_room']);
         add_action('wp_ajax_nopriv_fplace_search_room', [$this, 'fplace_search_room']);
 
-        add_action('wp_ajax_fplace_booking', [$this, 'fplace_booking_room']);
-        add_action('wp_ajax_nopriv_fplace_booking', [$this, 'fplace_booking_room']);
+        add_action('wp_ajax_cancel_booking', [$this, 'fplace_cancel_booking']);
+        add_action('wp_ajax_nopriv_cancel_booking', [$this, 'fplace_cancel_booking']);
     }
 
     /**
@@ -211,34 +211,29 @@ class Ajax_Actions{
         die();
     }
 
-    public function fplace_booking_room(){
+    /**
+     * Get cancel booking
+     */
+    public function fplace_cancel_booking(){
         $date       = (string)$_POST['get_date'] ?? '';
-        $post_id    = $_POST['id'] ? intval( $_POST['id'] ) : '';
+        $booked_id  = $_POST['booked_id'] ? intval( $_POST['booked_id'] ) : '';
+        $room_id    = $_POST['room_id'] ? intval( $_POST['room_id'] ) : '';
 
-        if( empty( $date ) || empty( $post_id ) ){
+        echo $date . "</br>";
+        echo $booked_id . "</br>";
+        echo $room_id . "</br>";
+
+        die();
+
+        if( empty( $date ) || empty( $booked_id ) ){
             echo "Sorry this is the invalid request";
             die(0);
         }
-        ?>
-        <div class="fplace-proposed-booking-area">
-            <div class="fplace-booking-item-header">
-                <h2>View Proposed Booking Details</h2>
-            </div>
-            <div class="fplace-booking-item">
-                <div class="">
-                    <h3>Room 6, Double Ensuite, House No: 26</h3>
-                </div>
-                <h3></h3>
-                <div class="fplace-proposed-booking-form">
-                    <div class="fplace-proposed-booking-form-header">
-                        <h4>Required Booking Information</h4>
-                    </div>
-                    
-                    <?php echo do_shortcode('[gravityform id="1" title="false" description="false" ajax="true"]'); ?>
-                </div>
-            </div>
-        </div>
-        <?php
+
+        update_post_meta( $booked_id, 'booking_status', 'Canceled');
+        
+        echo "<p style='color:red'><strong>Canceled</strong></p>";
+
         die();
     }
 }

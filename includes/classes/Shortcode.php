@@ -26,9 +26,8 @@ class Shortcode{
 
         ob_start();
 
-        $booking_id         = isset( $_GET['booking'] ) ? intval($_GET['booking']) : null;
-        $date           = isset( $_GET['date'] ) ? (string)$_GET['date'] : null;
-        update_expired_bookings();
+        $booking_id  = isset( $_GET['booking'] ) ? intval($_GET['booking']) : null;
+        $date        = isset( $_GET['date'] ) ? (string)$_GET['date'] : null;
         //update_post_meta( 212, 'booking_date', '15/02/2024');
         ?>
         <section class="fplace-booking-main-wrapper">
@@ -120,7 +119,9 @@ class Shortcode{
                     <div class="fplace-room-search-wrapper">
                         <div class="fplace-room-search-area">
                             <p>Please select arrival date</p>
-                            <input type="text" id="fplace-room-input" placeholder="dd/mm/yyy">
+                            <div class="search-form-wrapper">
+                                <input type="text" id="fplace-room-input" placeholder="dd/mm/yyy">
+                            </div>
                             <div>
                                 <button id="fplace-get-room-search" type="submit">Check Availability</button>
                             </div>

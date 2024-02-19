@@ -26,8 +26,11 @@
 
 #fplace-room-input {
     width: 100%;
-    padding: 10px 15px;
+    padding: 8px 15px;
     border-radius: 5px;
+    background: #ffffff;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
 }
 .fplace-section-heading {
     text-align: center;
@@ -230,4 +233,26 @@ h4.fplace-total-price {
 .fplace-arriving-departing {
     display: flex;
     justify-content: center;
+}
+.search-form-wrapper {
+    display: flex;
+}
+.fplace-room-search-area .ui-datepicker-trigger{
+    position: relative;
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin-left: 20px;
+    width: 50px;
+    font-size: 25px;
+    color: #666;
+    line-height: 50px;
+}
+.fplace-room-search-area .ui-datepicker-trigger:before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: "Font Awesome 5 Free";
+    content: "\f073";
+    font-weight: 900;
 }
