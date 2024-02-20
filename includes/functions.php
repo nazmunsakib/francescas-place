@@ -68,16 +68,22 @@ function fplace_populate_room_title( $form ) {
 }
 add_filter( 'gform_pre_render_1', 'fplace_populate_room_title' );
 
-// Function to schedule cron event
-function my_custom_cron_schedule() {
-    if ( ! wp_next_scheduled( 'my_custom_event_new' ) ) {
-        wp_schedule_event( strtotime( 'today 12:00' ), 'daily', 'my_custom_event_new' );
+/**
+ * Function to schedule cron event for booking expire
+ *
+ */
+function fplace_booking_cron_schedule() {
+    if ( ! wp_next_scheduled( 'booking_expire_event' ) ) {
+        wp_schedule_event( strtotime( 'today 12:00' ), 'daily', 'booking_expire_event' );
     }
 }
-// Hook into the 'wp' action to schedule the event
-add_action( 'wp', 'my_custom_cron_schedule' );
+add_action( 'wp', 'fplace_booking_cron_schedule' );
 
-function update_expired_bookings() {
+/**
+ * update expire booking
+ *
+ */
+function fplace_update_expired_bookings() {
     $args = array(
         'post_type' => 'fpb_booking', 
         'posts_per_page' => -1
@@ -91,22 +97,30 @@ function update_expired_bookings() {
 
             $post_id        = get_the_ID();
             $booked_dates   = get_post_meta( $post_id, 'booking_date', true );
+            $room_id        = get_post_meta( $post_id, 'room_id', true ) ?? false;
             $current_date   = strtotime(date('Y-m-d'));
             $date_object    = strtotime(str_replace('/', '-', $booked_dates));
 
-            update_post_meta( $post_id, 'booking_status', 'Expired');
+            if( $date_object < $current_date ) {
+                $booking_status = get_post_meta( $post_id, 'booking_status', true );
+                if( 'Active' == $booking_status ){
+                    update_post_meta( $post_id, 'booking_status', 'Expired');
+                }
 
-            // if( $date_object < $current_date ) {
-            //     $booking_status = get_post_meta( $post_id, 'booking_status', true );
-            //     if( 'Active' == $booking_status ){
-            //         update_post_meta( $post_id, 'booking_status', 'Expired');
-            //     }
-            // }
+                /**
+                 * Update booking dates of room
+                 */
+                if( $room_id ){
+                    $booking_dates      = get_field( 'booking_dates', $room_id );
+                    $new_booking_dates  = str_replace( $booked_dates .",", "", $booking_dates );
+                    update_field( 'booking_dates', $new_booking_dates, $room_id );
+                }
+            }
         }
         wp_reset_postdata();
     }
 }
-add_action( 'my_custom_event_new', 'update_expired_bookings' );
+add_action( 'booking_expire_event', 'fplace_update_expired_bookings' );
 
 
 

@@ -219,19 +219,22 @@ class Ajax_Actions{
         $booked_id  = $_POST['booked_id'] ? intval( $_POST['booked_id'] ) : '';
         $room_id    = $_POST['room_id'] ? intval( $_POST['room_id'] ) : '';
 
-        echo $date . "</br>";
-        echo $booked_id . "</br>";
-        echo $room_id . "</br>";
-
-        die();
-
         if( empty( $date ) || empty( $booked_id ) ){
             echo "Sorry this is the invalid request";
             die(0);
         }
 
+        /**
+         * Update booking dates of room
+         */
+        $booking_dates      = get_field( 'booking_dates', $room_id );
+        $new_booking_dates  = str_replace( $date .",", "", $booking_dates );
+        update_field( 'booking_dates', $new_booking_dates, $room_id );
+
+        /**
+         * Canceled booking
+         */
         update_post_meta( $booked_id, 'booking_status', 'Canceled');
-        
         echo "<p style='color:red'><strong>Canceled</strong></p>";
 
         die();
