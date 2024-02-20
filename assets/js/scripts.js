@@ -76,18 +76,32 @@
                 const totalPriceWrap    = room.querySelector('.fplace-total-amount');
                 const bookBtn           = room.querySelector('.fplace-book-btn');
     
-                if( extraPriceWrapp ){
-                    const price     = Number( totalPriceWrap.innerText );
-                    const postId    = Number( bookBtn.getAttribute('data-id') );
+                if( extraPriceWrapp && bookBtn ){
+                    const price     = Number( bookBtn.getAttribute('data-price') );
+
                     extraPriceWrapp.addEventListener('change', function(event){
                         if( extraPriceWrapp.checked == true && totalPriceWrap ){
                             const exPrice = Number( extraPriceWrapp.value );
                             const totalPrice = price + exPrice;
                             totalPriceWrap.innerText = `${totalPrice}.00`;
-                            sessionStorage.setItem("priceData", JSON.stringify({'extra': true, 'total_price': totalPrice, id: postId }));
                         }else{
                             totalPriceWrap.innerText = `${price}.00`;
-                            sessionStorage.setItem("priceData", JSON.stringify({'extra': false, 'total_price': price, id: postId }));
+                        }
+                    });
+                }
+
+                /**
+                 * Set price on session storage
+                 */
+                if( bookBtn && extraPriceWrapp ){
+                    const postId    = Number( bookBtn.getAttribute('data-id') );
+                    bookBtn.addEventListener('click', function(e){
+                        const price     = Number( bookBtn.getAttribute('data-price') );
+                        if( extraPriceWrapp.checked == true  ){
+                            const extraPrice = Number( extraPriceWrapp.value )
+                            sessionStorage.setItem("priceData", JSON.stringify({'extra': true, 'price': price, 'extra_price': extraPrice, id: postId }));
+                        }else{
+                            sessionStorage.setItem("priceData", JSON.stringify({'extra': false, 'price': price, id: postId }));
                         }
                     });
                 }
@@ -100,6 +114,7 @@
         const searchWrap    = document.getElementById('fplace-room-input');
         const searchButton  = document.getElementById('fplace-get-room-search');
         const cancelBooking = document.getElementsByClassName('fplace-cancel-booking');
+        const priceField    = document.querySelector('.fplace-proposed-booking-form-container #input_1_16');
 
         /**
          * Search datepicker
@@ -139,6 +154,30 @@
                 });
             }
         }
+
+        /**
+         * set total price value on price field
+         */
+        if( priceField ){
+            const getPriceData = sessionStorage.getItem('priceData');
+            if( getPriceData ){
+                const getPrice = JSON.parse(getPriceData);
+                priceField.value = getPrice.price;
+                if( true === getPrice.extra ){
+                    priceField.value = getPrice.price + getPrice.extra_price;
+                    console.log( getPrice.price + getPrice.extra_price );
+                }
+            }
+        }
+
+        /**
+         * Clear session storage data 
+         * after booking
+         */
+        setTimeout( function() {
+            sessionStorage.removeItem('priceData');
+        }, 5 * 60 * 1000);
+
     }
 
     /**

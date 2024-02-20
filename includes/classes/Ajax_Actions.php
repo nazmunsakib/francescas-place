@@ -184,7 +184,7 @@ class Ajax_Actions{
                                                 <?php echo 'Total £' . "<span class='fplace-total-amount'>{$price}</span>"; ?>
                                             </h4>
                                             <div>
-                                                <a href="<?php echo esc_url( $book_url ); ?>" class="fplace-book-btn" data-id="<?php echo esc_attr( $id ); ?>" data-date="<?php echo esc_attr( $date ); ?>" >
+                                                <a href="<?php echo esc_url( $book_url ); ?>" class="fplace-book-btn" data-id="<?php echo esc_attr( $id ); ?>" data-date="<?php echo esc_attr( $date ); ?>" data-price="<?php echo esc_attr( $price ); ?>">
                                                     <?php _e('Book room'); ?>
                                                 </a>
                                             </div>

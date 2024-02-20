@@ -28,8 +28,6 @@ class Shortcode{
 
         $booking_id  = isset( $_GET['booking'] ) ? intval($_GET['booking']) : null;
         $date        = isset( $_GET['date'] ) ? (string)$_GET['date'] : null;
-        //update_post_meta( 212, 'booking_date', '15/02/2024');
-        echo g;
         ?>
         <section class="fplace-booking-main-wrapper">
             <?php 
@@ -110,21 +108,21 @@ class Shortcode{
                         </div>
                     </div>
                 <?php else: ?>
-                    <p class="warning">Something went wrong, the request is invalid please try agin!</p>
+                    <p class="warning"><?php _e('Something went wrong, the request is invalid please try agin!', 'fplace-booking'); ?></p>
                 <?php endif; ?>
             <?php else: ?>
                 <div id='fplace-booking-container' class="fplace-booking-container">
                     <div class="fplace-section-heading">
-                        <h2>Check Availability</h2>
+                        <h2><?php _e('Check Availability', 'francescas-place'); ?></h2>
                     </div>
                     <div class="fplace-room-search-wrapper">
                         <div class="fplace-room-search-area">
-                            <p>Please select arrival date</p>
+                            <p><?php _e('Please select arrival date', 'francescas-place'); ?></p>
                             <div class="search-form-wrapper">
                                 <input type="text" id="fplace-room-input" placeholder="dd/mm/yyy">
                             </div>
                             <div>
-                                <button id="fplace-get-room-search" type="submit">Check Availability</button>
+                                <button id="fplace-get-room-search" type="submit"><?php _e('Check Availability', 'francescas-place'); ?></button>
                             </div>
                         </div>
                     </div>

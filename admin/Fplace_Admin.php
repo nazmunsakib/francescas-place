@@ -41,7 +41,7 @@ class Fplace_Admin{
 
         $customColumns = array(
             'status'            => __( 'Status', 'fplace-booking' ),
-            'booked_date'       => __( 'Booked Date', 'fplace-booking' ),
+            'booked_info'       => __( 'Booked Info', 'fplace-booking' ),
             'customer_info'     => __( 'Customer Info', 'fplace-booking' ),
             'address'             => __( 'Address', 'fplace-booking' ),
         );
@@ -83,9 +83,10 @@ class Fplace_Admin{
                 echo  $statusElement;
 
                 break;
-            case 'booked_date':
-
-                echo "<p>{$booking_date }</p>";
+            case 'booked_info':
+                $price_total = get_post_meta( $postId, 'price_total', true );
+                echo "<p><strong>Date</strong>: {$booking_date}</p>";
+                echo "<p><strong>Total Price</strong>: £".$price_total."</p>";
 
                 break;
             case 'customer_info':
@@ -96,7 +97,6 @@ class Fplace_Admin{
 
                 echo "<p><strong>Name</strong>: {$customer_name}</p>";
                 echo "<p><strong>Phone</strong>: {$customer_phone}</p>";
-                echo "<p><strong>Tel</strong>: {$customer_tel}</p>";
                 echo "<p><strong>Email</strong>: {$customer_email}</p>";
                 
                 break;
@@ -108,7 +108,6 @@ class Fplace_Admin{
                 $customer_town_city = get_post_meta( $postId, 'customer_town_city', true );
 
                 echo "<p><strong>Address</strong>: {$address_line_1 }, {$address_line_2}</p>";
-                echo "<p><strong>Postcode</strong>: {$customer_postcode}</p>";
                 echo "<p><strong>City</strong>: {$customer_town_city}</p>";
                 echo "<p><strong>Country</strong>: {$customer_country}</p>";
 
