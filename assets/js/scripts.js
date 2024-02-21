@@ -110,11 +110,13 @@
     }
 
     const fPlaceBookingMain = ()=> {
-        const searchResult  = document.getElementById('fplace-search-result-container');
-        const searchWrap    = document.getElementById('fplace-room-input');
-        const searchButton  = document.getElementById('fplace-get-room-search');
-        const cancelBooking = document.getElementsByClassName('fplace-cancel-booking');
-        const priceField    = document.querySelector('.fplace-proposed-booking-form-container #input_1_16');
+        const searchResult      = document.getElementById('fplace-search-result-container');
+        const searchWrap        = document.getElementById('fplace-room-input');
+        const searchButton      = document.getElementById('fplace-get-room-search');
+        const cancelBooking     = document.getElementsByClassName('fplace-cancel-booking');
+        const priceField        = document.querySelector('.fplace-proposed-booking-form-container #input_1_16');
+        const proposedExPrice   = document.querySelector('.fplace-proposed-extra-price');
+        const proposedPrice     = document.querySelector('.fplace-proposed-total-amount');
 
         /**
          * Search datepicker
@@ -166,6 +168,29 @@
                 if( true === getPrice.extra ){
                     priceField.value = getPrice.price + getPrice.extra_price;
                     console.log( getPrice.price + getPrice.extra_price );
+                }
+            }
+        }
+
+        /**
+         * set price on Proposed Booking Details
+         */
+        if( proposedPrice ){
+            const getPriceData = sessionStorage.getItem('priceData');
+            const proposedExtraCheck     = document.querySelector('.fplace_proposed_extra_price_check');
+            
+            if( getPriceData ){
+                const getPrice = JSON.parse(getPriceData);
+                proposedPrice.innerHTML = getPrice.price;
+
+                if( true === getPrice.extra ){
+
+                    if( proposedExtraCheck ){
+                        proposedExtraCheck.checked = true;
+                    }
+
+                    proposedPrice.innerHTML     = getPrice.price + getPrice.extra_price;
+                    proposedExPrice.innerHTML   = getPrice.extra_price;
                 }
             }
         }

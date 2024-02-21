@@ -256,3 +256,83 @@ h4.fplace-total-price {
     content: "\f073";
     font-weight: 900;
 }
+.fplace-booking-info {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.fplace-booking-info li {
+    font-size: 15px;
+}
+.fplace-booking-info li .booking-info-icon i {
+    color: #1f59b0;
+}
+.fplace-booking-info li .booking-info-icon span {
+    margin-left: 10px;
+}
+.fplace-booking-info li .booking-info-icon {
+    width: 230px;
+    display: inline-block;
+}
+.fplace_proposed_extra_price_check {
+    margin-left: 0;
+    margin-right: 10px;
+}
+.fplace-proposed-booking-form .fplace-booking-info-total-price {
+    font-size: 20px;
+    color: #1f59b0;
+}
+.fplace-accommodation-cancellation h3 {
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+.fplace-accommodation-cancellation {
+    text-align: center;
+}
+.fplace-accommodation-cancellation-section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.fplace-wait-list-wrapper {
+    margin-top: 30px;
+}
+.fplace-wait-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+}
+.fplace-wait-list-table thead {
+    background: #1f59b0;
+}
+.fplace-wait-list-table thead tr th{
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.7;
+    text-transform: capitalize;
+    font-weight: 600;
+    padding: 5px 12px;
+    border: 1px solid #dddddd;
+}
+.fplace-wait-list-tableth, .fplace-wait-list-table td {
+    border: 1px solid #dddddd;
+    padding: 8px 12px;
+    text-align: left;
+    width: 33.33%;
+}
+
+.fplace-wait-action{
+    color: #fff;
+    font-size: 15px;
+    background: #ed1c29;
+    border: 1px solid #ed1c29;
+    padding: 7px 15px;
+    border-radius: 30px;
+    margin-top: 30px;
+    transition: .4s;
+    cursor: pointer;
+}
+.fplace-wait-action:hover{
+   background: #1f59b0;
+   color: #fff;
+}
