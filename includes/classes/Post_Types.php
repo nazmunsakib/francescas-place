@@ -77,7 +77,7 @@ class Post_Types{
             'labels'              => $labels,
             'supports'            => [ 'title', 'revisions', 'custom-fields' ],
             'hierarchical'        => true,
-            'public'              => true,
+            'public'              => false,
             'show_ui'             => true,
             'show_in_menu'        => true,
             'show_in_nav_menus'   => true,
@@ -94,6 +94,44 @@ class Post_Types{
         ];
 
         register_post_type( 'fpb_booking', $args );
+
+        $labels = [
+            'name'               => _x( 'Wait List', 'Post Type General Name', 'francescas-place' ),
+            'singular_name'      => _x( 'Wait List', 'Post Type Singular Name', 'francescas-place' ),
+            'menu_name'          => __( 'Wait List', 'francescas-place' ),
+            'parent_item_colon'  => __( 'Wait List', 'francescas-place' ),
+            'all_items'          => __( 'All Wait List', 'francescas-place' ),
+            'view_item'          => __( 'View Wait List', 'francescas-place' ),
+            'add_new_item'       => __( 'Add Wait List', 'francescas-place' ),
+            'add_new'            => __( 'Add New', 'francescas-place' ),
+            'edit_item'          => __( 'Edit Wait List', 'francescas-place' ),
+            'update_item'        => __( 'Update Wait List', 'francescas-place' ),
+            'search_items'       => __( 'Search Wait List', 'francescas-place' ),
+            'not_found'          => __( 'Not Wait List found', 'francescas-place' ),
+            'not_found_in_trash' => __( 'Not found in Trash', 'francescas-place' ),
+        ];
+
+        $args = [
+            'labels'              => $labels,
+            'supports'            => [ 'title', 'revisions', 'custom-fields' ],
+            'hierarchical'        => true,
+            'public'              => false,
+            'show_ui'             => true,
+            'show_in_menu'        => false,
+            'show_in_nav_menus'   => true,
+            'show_in_admin_bar'   => true,
+            'menu_position'       => 5,
+            'menu_icon'           => 'dashicons-nametag',
+            'can_export'          => true,
+            'has_archive'         => false,
+            'exclude_from_search' => true,
+            'publicly_queryable'  => true,
+            'show_in_rest'        => true,
+            'rewrite'             => false,
+            'capability_type'     => 'post',
+        ];
+
+        register_post_type( 'fpb_wait_list', $args );
     }
 
     

@@ -7,7 +7,7 @@
      * @param {*} date 
      * @returns 
      */
-    const fPlaceActions = async ( selector, action, date = null ) => {
+    const fPlaceActions = async ( selector, action, date = null, userId = null ) => {
 
         if( ! selector || ! action ){
             return false;
@@ -18,6 +18,7 @@
         }
 
         date ? data.get_date    = date : null;
+        userId ? data.user_id   = userId : null;
         selector.getAttribute('data-bookedId')  ? data.booked_id    = selector.getAttribute('data-bookedId') : null;
         selector.getAttribute('data-roomId')    ? data.room_id      = selector.getAttribute('data-roomId') : null;
 
@@ -135,9 +136,10 @@
          */
         if( searchButton ){
             searchButton.addEventListener('click', function( event ){
-                const getDate = searchWrap.value;
+                const getDate   = searchWrap.value;
+                const userId    = this.getAttribute('data-customerid');
                 if( getDate ){
-                    fPlaceActions( searchResult, 'fplace_search_room', getDate );
+                    fPlaceActions( searchResult, 'fplace_search_room', getDate, userId );
                 }
             });
         }

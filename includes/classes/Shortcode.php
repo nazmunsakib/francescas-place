@@ -21,14 +21,15 @@ class Shortcode{
             return $content;
         }
 
-        $atts = shortcode_atts( array(
-            'settings'=> '',
+        $settings = shortcode_atts( array(
+            'a'=> '',
         ) , $atts );
 
         ob_start();
 
-        $booking_id  = isset( $_GET['booking'] ) ? intval($_GET['booking']) : null;
-        $date        = isset( $_GET['date'] ) ? (string)$_GET['date'] : null;
+        $booking_id         = isset( $_GET['booking'] ) ? intval( $_GET['booking'] ) : null;
+        $date               = isset( $_GET['date'] ) ? (string)$_GET['date'] : null;
+        $current_user_id    = get_current_user_id();
         ?>
         <section class="fplace-booking-main-wrapper">
             <?php 
@@ -51,7 +52,7 @@ class Shortcode{
                         </div>
                         <div class="fplace-booking-item">
                             <div class="fplace-item-header">
-                                <h3><?php echo get_the_title($booking_id); ?></h3>
+                                <h3><?php echo get_the_title( $booking_id ); ?></h3>
                             </div>
 
                             <div class="fplace-proposed-booking-form">
@@ -119,7 +120,7 @@ class Shortcode{
                                 <input type="text" id="fplace-room-input" placeholder="dd/mm/yyy">
                             </div>
                             <div>
-                                <button id="fplace-get-room-search" type="submit"><?php _e('Check Availability', 'francescas-place'); ?></button>
+                                <button id="fplace-get-room-search" type="submit" data-customerId="<?php echo $current_user_id; ?>"><?php _e('Check Availability', 'francescas-place'); ?></button>
                             </div>
                         </div>
                     </div>
@@ -139,8 +140,8 @@ class Shortcode{
             return $content;
         }
 
-        $atts = shortcode_atts( array(
-            'settings'=> '',
+        $settings = shortcode_atts( array(
+            'a'=> '',
         ) , $atts );
 
         ob_start();

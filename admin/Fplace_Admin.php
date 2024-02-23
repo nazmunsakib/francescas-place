@@ -17,6 +17,8 @@ class Fplace_Admin{
         add_filter( "manage_fpb_booking_posts_columns", [$this, 'fplace_booking_columns'] );
         add_filter('acf/load_field/name=booking_dates', [$this, 'flace_disable_dates_field'] );
         add_action( 'add_meta_boxes', [$this, 'fplace_add_meta_boxes'] );
+        add_action('admin_menu', [$this, 'fplace_wait_list_submenu_of_booking'] );
+        add_action('pre_get_posts', [$this,'booking_admin_order'] );
     }
 
     /**
@@ -44,7 +46,7 @@ class Fplace_Admin{
             'status'            => __( 'Status', 'fplace-booking' ),
             'booked_info'       => __( 'Booked Info', 'fplace-booking' ),
             'customer_info'     => __( 'Customer Info', 'fplace-booking' ),
-            'address'             => __( 'Address', 'fplace-booking' ),
+            'address'           => __( 'Address', 'fplace-booking' ),
         );
 
         $offset  = array_search( 'date', array_keys( $columns ) ); // Set custom columns position before "DATE" column
@@ -78,6 +80,8 @@ class Fplace_Admin{
                     $statusElement .= "<p style='color:green'><strong>{$booking_status}</strong></p>";
                     $statusElement .= "<a href='' class='fplace-cancel-booking' style='color:red' data-bookedId='{$postId}' data-bookingDate='{$booking_date}' data-roomId='{$room_id}'>Cancel</a>";
                     $statusElement .= "</div>";
+                }else if( 'Completed' ==  $booking_status ){
+                    $statusElement .= "<p style='color:blue'><strong>{$booking_status}</strong></p>";
                 }else{
                     $statusElement .= "<p style='color:red'><strong>{$booking_status}</strong></p>";
                 }
@@ -160,6 +164,36 @@ class Fplace_Admin{
 
         </div>
         <?php
+    }
+
+    /**
+    * add Wait list as a submenu of booking post type
+    * 
+    * @return void
+    */
+    public function fplace_wait_list_submenu_of_booking() {
+        add_submenu_page(
+            'edit.php?post_type=fpb_booking',
+            'Wait List',
+            'Wait List',
+            'manage_options',
+            'edit.php?post_type=fpb_wait_list',
+            ''
+        );
+    }
+
+    /**
+    * Booking admin order
+    * 
+    * @return void
+    */
+    public function booking_admin_order( $query ) {
+        global $pagenow;
+
+        if( is_admin() && $pagenow == 'edit.php' && isset( $query->query['post_type'] ) && $query->query['post_type'] == 'fpb_booking' ) {
+            $query->set('orderby', 'date');
+            $query->set('order', 'DESC');
+        }
     }
 
 }

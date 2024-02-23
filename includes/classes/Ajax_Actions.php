@@ -13,18 +13,22 @@ use \FrancescasPlace\Booking\Helper;
 class Ajax_Actions{
 
     public function __construct(){
-        add_action('wp_ajax_fplace_search_room', [$this, 'fplace_search_room']);
-        add_action('wp_ajax_nopriv_fplace_search_room', [$this, 'fplace_search_room']);
+        add_action('wp_ajax_fplace_search_room', [$this, 'fplace_search_room'] );
+        add_action('wp_ajax_nopriv_fplace_search_room', [$this, 'fplace_search_room'] );
 
         add_action('wp_ajax_cancel_booking', [$this, 'fplace_cancel_booking']);
-        add_action('wp_ajax_nopriv_cancel_booking', [$this, 'fplace_cancel_booking']);
+        add_action('wp_ajax_nopriv_cancel_booking', [$this, 'fplace_cancel_booking'] );
+
+        add_action('wp_ajax_submit_wait_list_form', [$this, 'submit_wait_list_form'] );
+        add_action('wp_ajax_nopriv_submit_wait_list_form',  [$this, 'submit_wait_list_form'] );
     }
 
     /**
      * Availability search
      */
     public function fplace_search_room(){ 
-        $date = (string)$_POST['get_date'] ?? '';
+        $date       = (string)$_POST['get_date'] ?? '';
+        $user_id    = intval( $_POST['user_id'] ) ?? '';
 
         //compare date 
         $date_object    = strtotime(str_replace('/', '-', $date));
@@ -201,14 +205,14 @@ class Ajax_Actions{
                 ?>
                 <div class="fplace-data-not-found">
                     <h3><?php _e('** Sorry - we don’t currently have any availability for these dates **', 'fplace-booking'); ?></h3>
-                    <a href="<?php echo esc_url( home_url('/wait-list') ); ?>/" class="fplace-red-btn">Please put me on the accommodation cancellation wait list</a>
+                    <a href="<?php echo esc_url( home_url('/wait-list') ); ?>/" class="fplace-red-btn" data-date="<?php echo $date ?>" data-customerId="<?php echo $user_id; ?>">Please put me on the accommodation cancellation wait list</a>
                 </div>
                 <?php
             endif;
             ?>
         </div>
         <?php
-        die();
+        wp_die();
     }
 
     /**
@@ -237,8 +241,40 @@ class Ajax_Actions{
         update_post_meta( $booked_id, 'booking_status', 'Canceled');
         echo "<p style='color:red'><strong>Canceled</strong></p>";
 
-        die();
+        wp_die();
     }
+
+    public function submit_gravity_form_ajax() {
+
+        if (isset($_POST['form_id']) && is_numeric($_POST['form_id'])) {
+            $form_id = intval($_POST['form_id']);
+
+            check_ajax_referer('submit_gravity_form_nonce', 'security');
+
+            $form = GFAPI::get_form($form_id);
+            $entry = array(
+                'form_id' => $form_id,
+                'status' => 'active',
+            );
+
+            // Insert entry
+            $entry_id = GFAPI::add_entry($entry);
+
+            if (!is_wp_error($entry_id)) {
+                echo json_encode(array('success' => true, 'message' => 'Form submitted successfully.'));
+            } else {
+                echo json_encode(array('success' => false, 'message' => 'Failed to submit form.'));
+            }
+        } else {
+            echo json_encode(array('success' => false, 'message' => 'Invalid form ID.'));
+        }
+
+        // Always exit to avoid further execution
+        wp_die();
+    }
+
 }
 
 new Ajax_Actions();
+
+

@@ -53,20 +53,42 @@ add_filter( 'gform_confirmation_1', 'fplace_booking_confirmation', 10, 4 );
  * @return array
  */
 function fplace_populate_room_title( $form ) {
-    $booking_id = isset( $_GET['booking'] ) ? intval($_GET['booking']) : null;
-    $room_title = get_the_title( $booking_id );
+    $booking_id     = isset( $_GET['booking'] ) ? intval($_GET['booking']) : null;
+    $room_title     = get_the_title( $booking_id );
+    $first_name     = '';
+    $last_name      = '';
+    $customer_email = '';
 
     if( $booking_id && $room_title ){
+        $customer = wp_get_current_user();
+        if ( $customer instanceof WP_User ) {
+            $first_name     = $customer->first_name;
+            $last_name      = $customer->last_name;
+            $customer_email = $customer->user_email;
+        }
+
         foreach ( $form['fields'] as &$field ) {
+            if ($field->type == 'name' && $field->id == 2 ) {
+                if( isset(  $field->inputs[1]['defaultValue'] ) ){
+                    $field->inputs[1]['defaultValue'] =  esc_html( $first_name . " " . $last_name ); 
+                }
+            }
+
+            if ( $field->id == '10' ) {
+                $field->defaultValue =  $customer_email;
+            }
+
             if ( $field->id == '15' ) {
                 $field->defaultValue =  $room_title;
             }
+
         }
     }
 
     return $form;
 }
 add_filter( 'gform_pre_render_1', 'fplace_populate_room_title' );
+
 
 /**
  * Function to schedule cron event for booking expire
@@ -83,7 +105,7 @@ add_action( 'wp', 'fplace_booking_cron_schedule' );
  * update expire booking
  *
  */
-function fplace_update_expired_bookings() {
+function fplace_update_completed_bookings() {
     $args = array(
         'post_type' => 'fpb_booking', 
         'posts_per_page' => -1
@@ -104,7 +126,7 @@ function fplace_update_expired_bookings() {
             if( $date_object < $current_date ) {
                 $booking_status = get_post_meta( $post_id, 'booking_status', true );
                 if( 'Active' == $booking_status ){
-                    update_post_meta( $post_id, 'booking_status', 'Expired');
+                    update_post_meta( $post_id, 'booking_status', 'Completed');
                 }
 
                 /**
@@ -120,7 +142,8 @@ function fplace_update_expired_bookings() {
         wp_reset_postdata();
     }
 }
-add_action( 'booking_expire_event', 'fplace_update_expired_bookings' );
+add_action( 'booking_expire_event', 'fplace_update_completed_bookings' );
+
 
 
 
