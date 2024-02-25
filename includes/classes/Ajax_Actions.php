@@ -51,10 +51,10 @@ class Ajax_Actions{
         $departing_day  = $get_date['departing_day']    ?? '';
 
         $args = array(
-            'post_type'     => 'rooms',
-            'posts_per_pages' => -1,
-            'meta_query'    => array(
-                'relation' => 'AND',
+            'post_type'         => 'rooms',
+            'posts_per_pages'   => -1,
+            'meta_query'        => array(
+                'relation'      => 'AND',
                 array( 
                     'key'       => 'booking_dates',
                     'value'     =>  $date,
@@ -62,7 +62,7 @@ class Ajax_Actions{
                 ),
                 array( 
                     'key'       => 'availability',
-                    'value'     =>  '1',
+                    'value'     => '1',
                     'compare'   => '=='
                 )
             )
@@ -265,26 +265,26 @@ class Ajax_Actions{
      * Add waiting list
      */
     public function submit_wait_list_form() {
-        $date = (string)$_POST['get_date'] ?? '';
-        $user_id = intval( $_POST['user_id'] ) ?? '';
-        $customer_name = $_POST['customer_name'] ?? '';
+        $date           = (string)$_POST['get_date'] ?? '';
+        $user_id        = intval( $_POST['user_id'] ) ?? '';
+        $customer_name  = $_POST['customer_name'] ?? '';
         $customer_email = $_POST['customer_email'] ?? '';
         
         if( empty( $date ) || empty( $customer_name ) ){
-                echo json_encode( array('success' => false, 'message' => 'error') );
-                wp_die();
+            echo json_encode( array('success' => false, 'message' => 'error') );
+            wp_die();
         }
 
         $get_date = Helper::formattingDate($date);
-        $arriving_date  = $get_date['arriving_date']    ?? '';
-        $arriving_day   = $get_date['arriving_day']     ?? '';
-        $departing_date = $get_date['departing_date']   ?? '';
-        $departing_day  = $get_date['departing_day']    ?? '';
+        $arriving_date  = $get_date['arriving_date'] ?? '';
+        $arriving_day   = $get_date['arriving_day'] ?? '';
+        $departing_date = $get_date['departing_date'] ?? '';
+        $departing_day  = $get_date['departing_day'] ?? '';
 
         $post_data = array(
-            'post_title' => sanitize_text_field( $customer_name ) . " is waiting",
-            'post_type' => 'fpb_wait_list',
-            'post_status' => 'publish'
+            'post_title'    => sanitize_text_field( $customer_name ) . " is waiting",
+            'post_type'     => 'fpb_wait_list',
+            'post_status'   => 'publish'
         );
 
         // Insert the post
@@ -294,11 +294,12 @@ class Ajax_Actions{
             $arriving       =   $arriving_day . ", " . $arriving_date;
             $departing      =   $departing_day . ", " . $departing_date;
             $waiting_date   =   $get_date['timestamp'] ?? '';
+            $admin_email = get_option('fplace_admin_email');
 
             //send mail to admin
-            $admin_email = 'nazmun.sakib1042@gmail.com';
-            $subject = "Francesca's Place Wait list";
-            $message = $customer_name . " is waiting for booking cancellation";
+            $admin_email    = get_option('fplace_admin_email') ?? '';
+            $subject        = "Francesca's Place Add to Wait list";
+            $message        = $customer_name . " is waiting for booking cancellation";
             wp_mail( $admin_email, $subject, $message );
 
             //Set post meta 
@@ -326,6 +327,11 @@ class Ajax_Actions{
             echo json_encode( array('success' => false, 'message' => 'Something Wrong' ) );
             wp_die();
         }
+
+        $admin_email    = get_option('fplace_admin_email') ?? '';
+        $subject        = "Francesca's Place Remove to Wait list";
+        $message        = "Remove to wait list";
+        wp_mail( $admin_email, $subject, $message );
 
         update_post_meta( $post_id, 'status', 'removed');
         echo json_encode( array('success' => true, 'post_id' => $post_id, 'message' => 'Remove form wait' ) );

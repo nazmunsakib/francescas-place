@@ -154,8 +154,12 @@ class Fplace_Admin{
     function render_wait_list_columns( $column, $postId ) {
         switch ( $column ) {
             case 'status':
-                $status     = get_post_meta( $postId, 'status', true );
-                echo "<p>{$status}</p>";
+                $status = get_post_meta( $postId, 'status', true );
+                if( 'removed' == $status ){
+                    echo "<p style='color:red'>{$status}</p>";
+                }else{
+                    echo "<p style='color:green'>{$status}</p>";
+                }
                 break;
             case 'customer_info':
                 $customer_email     = get_post_meta( $postId, 'customer_email', true );

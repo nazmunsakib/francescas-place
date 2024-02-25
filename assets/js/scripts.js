@@ -22,7 +22,7 @@
         userId ? data.user_id   = userId : null;
         selector.getAttribute('data-bookedId')  ? data.booked_id    = selector.getAttribute('data-bookedId') : null;
         selector.getAttribute('data-roomId')    ? data.room_id      = selector.getAttribute('data-roomId') : null;
-        console.log(data);
+
         $.ajax({
             type: "POST",
             dataType: "html",

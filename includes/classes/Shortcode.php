@@ -21,10 +21,6 @@ class Shortcode{
             return $content;
         }
 
-        $settings = shortcode_atts( array(
-            'a'=> '',
-        ) , $atts );
-
         ob_start();
 
         $booking_id = isset( $_GET['booking'] ) ? intval( $_GET['booking'] ) : null;

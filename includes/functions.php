@@ -1,4 +1,5 @@
 <?php
+$fPb_formId = get_option('booking_form_id') ?? 1;
 /**
  * Add new booking date on meta 
  *
@@ -47,7 +48,7 @@ function fplace_booking_confirmation( $confirmation, $form, $entry, $ajax ) {
     <?php
     return $confirmation;
 }
-add_filter( 'gform_confirmation_1', 'fplace_booking_confirmation', 10, 4 );
+add_filter( 'gform_confirmation_'.$fPb_formId.'', 'fplace_booking_confirmation', 10, 4 );
 
 /**
  * Populate room title
@@ -91,7 +92,7 @@ function fplace_populate_room_title( $form ) {
 
     return $form;
 }
-add_filter( 'gform_pre_render_1', 'fplace_populate_room_title' );
+add_filter( 'gform_pre_render_'.$fPb_formId.'', 'fplace_populate_room_title' );
 
 
 /**

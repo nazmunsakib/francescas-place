@@ -74,6 +74,7 @@ final class Francescas_Place {
 
 		if( is_admin() ){
 			include_once( FPB_DIR_PATH . 'admin/Fplace_Admin.php' );
+			include_once( FPB_DIR_PATH . 'admin/Fplace_Settings.php' );
 		}
     }
 
