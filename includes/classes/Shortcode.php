@@ -27,9 +27,9 @@ class Shortcode{
 
         ob_start();
 
-        $booking_id         = isset( $_GET['booking'] ) ? intval( $_GET['booking'] ) : null;
-        $date               = isset( $_GET['date'] ) ? (string)$_GET['date'] : null;
-        $current_user_id    = get_current_user_id();
+        $booking_id = isset( $_GET['booking'] ) ? intval( $_GET['booking'] ) : null;
+        $date       = isset( $_GET['date'] ) ? (string)$_GET['date'] : null;
+        $userId     = get_current_user_id();
         ?>
         <section class="fplace-booking-main-wrapper">
             <?php 
@@ -120,7 +120,7 @@ class Shortcode{
                                 <input type="text" id="fplace-room-input" placeholder="dd/mm/yyy">
                             </div>
                             <div>
-                                <button id="fplace-get-room-search" type="submit" data-customerId="<?php echo $current_user_id; ?>"><?php _e('Check Availability', 'francescas-place'); ?></button>
+                                <button id="fplace-get-room-search" type="submit" data-userId="<?php echo $userId; ?>"><?php _e('Check Availability', 'francescas-place'); ?></button>
                             </div>
                         </div>
                     </div>
@@ -140,14 +140,26 @@ class Shortcode{
             return $content;
         }
 
-        $settings = shortcode_atts( array(
-            'a'=> '',
-        ) , $atts );
-
         ob_start();
 
-        $booking_id  = isset( $_GET['booking'] ) ? intval($_GET['booking']) : null;
-        $date        = isset( $_GET['date'] ) ? (string)$_GET['date'] : null;
+        $userId    = get_current_user_id();
+        $current_date = date('Y-m-d');
+        
+        $args = array(
+            'author'            => $userId,
+            'posts_per_page'    => -1,
+            'post_type'         => 'fpb_wait_list',
+            'post_status'       => 'publish',
+            'meta_query'        => array(
+                array(
+                    'key'       => 'status',
+                    'value'     => 'waiting',
+                    'compare'   => '=',
+                )
+            )
+        );
+        
+        $the_query = new \WP_Query( $args );
         ?>
         <section class="fplace-accommodation-cancellation-section">
             <div class="fplace-accommodation-cancellation">
@@ -167,21 +179,28 @@ confirmation email to confirm your booking has been successful.</p>
                         </tr>
                     </thead>
                     <tbody>
+                        <?php
+                        if ( $the_query->have_posts() ) :             
+                            while ( $the_query->have_posts() ) :
+                                $the_query->the_post();
+                                $post_id = get_the_ID();
+                                $arriving_date  = get_post_meta(  $post_id, 'arriving_date', true) ?? '';
+                                $departing_date = get_post_meta(  $post_id, 'departing_date', true) ?? '';
+                                ?>
+                                <tr>
+                                    <td><?php echo esc_html( $arriving_date ); ?></td>
+                                    <td><?php echo esc_html( $departing_date ); ?></td>
+                                    <td><a href="" class="fplace-wait-action" data-id="<?php echo esc_attr( $post_id ); ?>"><?php _e('Remove', 'fplace-booking'); ?></a></td>
+                                </tr>
+                                <?php 
+                            endwhile; 
+                            wp_reset_postdata();
+                        else :
+                        ?>
                         <tr>
-                            <td>Thursday, January 4, 2024</td>
-                            <td>Tuesday, February 20, 2024</td>
-                            <td><a href="" class="fplace-wait-action">Remove</a></td>
+                            <td><?php _e('No wait list found for you!'); ?></td>
                         </tr>
-                        <tr>
-                            <td>Friday, January 5, 2024</td>
-                            <td>Wednesday, February 21, 2024</td>
-                            <td><a href="" class="fplace-wait-action">Remove</a></td>
-                        </tr>
-                        <tr>
-                            <td>Saturday, March 2, 2024</td>
-                            <td>Sunday, March 3, 2024 </td>
-                            <td><a href="" class="fplace-wait-action">Remove</a></td>
-                        </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>

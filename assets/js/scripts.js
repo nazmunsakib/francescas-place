@@ -14,14 +14,15 @@
         }
 
         let data = {
-            'action': action
+            'action': action,
+            'nonce' : fPlace.nonce
         }
 
         date ? data.get_date    = date : null;
         userId ? data.user_id   = userId : null;
         selector.getAttribute('data-bookedId')  ? data.booked_id    = selector.getAttribute('data-bookedId') : null;
         selector.getAttribute('data-roomId')    ? data.room_id      = selector.getAttribute('data-roomId') : null;
-
+        console.log(data);
         $.ajax({
             type: "POST",
             dataType: "html",
@@ -41,6 +42,71 @@
                     }else{
                         selector.innerHTML = response;
                         fPlaceGetPrice();
+                    }
+                }
+            },
+            error : function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+            }
+        });
+
+        return false;
+    }
+
+    /**
+     * Get Ajax Call
+     * @param {*} date 
+     * @param {*} userId 
+     * @param {*} name 
+     *@param {*} email 
+     * @returns 
+     */
+    const fPlaceWaitList = async ( action = 'submit_wait_list', selector = null, date = null, userId = null, name = null, email = null, post_id = null ) => {
+
+        let data = {
+            'action': action,
+            'nonce' : fPlace.nonce
+        }
+
+        date ? data.get_date        = date : null;
+        userId ? data.user_id       = userId : null;
+        name ? data.customer_name   = name : null;
+        email ? data.customer_email = email : null;
+        post_id ? data.post_id      = post_id : null;
+
+        $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: fPlace.ajax_url,
+            data: data,
+            beforeSend : function ( xhr ) {
+                if( ('remove_wait_list' == action ) && selector ){
+                    selector.innerText = 'Removing...';
+                }
+                if( ('submit_wait_list' == action ) && selector ){
+                    let targetParent = selector.parentElement;
+                    targetParent.style.opacity = '0.5';
+                }
+            },
+            success: function( response ){
+                let getData = JSON.parse( response );
+                let targetParent = selector.parentElement;
+
+                if( ( 'remove_wait_list' == action )  && selector ){
+                    if( getData.success ){
+                        let getRow = targetParent.parentElement;
+                        if( getRow ){
+                            getRow.remove();
+                        }
+                    }
+                }
+
+                if( ('submit_wait_list' == action ) && selector ){
+                    targetParent.style.opacity = 1;
+                    if( getData.success ){
+                        window.location.href = `${fPlace.site_url}wait-list`
+                    }else{
+                        targetParent.innerHTML += "<p class='fplace-warning'>Something went wrong please try agin!</p>";
                     }
                 }
             },
@@ -118,6 +184,8 @@
         const priceField        = document.querySelector('.fplace-proposed-booking-form-container #input_1_16');
         const proposedExPrice   = document.querySelector('.fplace-proposed-extra-price');
         const proposedPrice     = document.querySelector('.fplace-proposed-total-amount');
+        const requestWaitList   = document.querySelector('.fplace-request-waitlist');
+        const removeWaitList    = document.getElementsByClassName('fplace-wait-action');
 
         /**
          * Search datepicker
@@ -137,7 +205,8 @@
         if( searchButton ){
             searchButton.addEventListener('click', function( event ){
                 const getDate   = searchWrap.value;
-                const userId    = this.getAttribute('data-customerid');
+                const userId    = this.getAttribute('data-userId');
+
                 if( getDate ){
                     fPlaceActions( searchResult, 'fplace_search_room', getDate, userId );
                 }
@@ -151,10 +220,46 @@
             for( let cancel of cancelBooking ){
                 cancel.addEventListener('click', function( event ){
                     event.preventDefault();
+
                     if( cancel ){
                         const getDate   = this.getAttribute('data-bookingdate');
                         fPlaceActions( cancel, 'cancel_booking', getDate);
                     }
+
+                });
+            }
+        }
+
+        /**
+         * Add Wait list
+         */
+        document.addEventListener('click', function( event ){
+            const theWrapper = event.target;
+            if( theWrapper.classList.contains('fplace-request-waitlist') ){
+                event.preventDefault();
+
+                const waitDate      = document.getElementById('waiting-date');
+                const customerId    = document.getElementById('customer-id');
+                const customerEmail = document.getElementById('customer-email');
+                const customerName  = document.getElementById('customer-name');
+
+                fPlaceWaitList( 'submit_wait_list', theWrapper, waitDate.value, customerId.value, customerName.value, customerEmail.value );
+            }
+        });
+
+        /**
+         * Remove from Wait list
+         */
+        if( removeWaitList.length > 0 ){
+            for( let remove of removeWaitList ){
+                remove.addEventListener('click', function( event ){
+                    event.preventDefault();
+                    if( remove ){
+                        const post_id   = this.getAttribute('data-id');
+                        console.log( post_id );
+                        fPlaceWaitList( 'remove_wait_list', remove, null, null, null, null, post_id );
+                    }
+
                 });
             }
         }
@@ -167,10 +272,12 @@
             if( getPriceData ){
                 const getPrice = JSON.parse(getPriceData);
                 priceField.value = getPrice.price;
+
                 if( true === getPrice.extra ){
                     priceField.value = getPrice.price + getPrice.extra_price;
                     console.log( getPrice.price + getPrice.extra_price );
                 }
+
             }
         }
 
@@ -196,15 +303,6 @@
                 }
             }
         }
-
-        /**
-         * Clear session storage data 
-         * after booking
-         */
-        setTimeout( function() {
-            sessionStorage.removeItem('priceData');
-        }, 5 * 60 * 1000);
-
     }
 
     /**

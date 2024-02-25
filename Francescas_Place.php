@@ -148,6 +148,7 @@ final class Francescas_Place {
 			'fPlace',
 			[
 				'ajax_url' => admin_url('admin-ajax.php'),
+				'site_url' => site_url('/'),
 				'nonce'    => wp_create_nonce('francescas_place_booking'),
 			]
 		);

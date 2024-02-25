@@ -115,7 +115,7 @@ class Post_Types{
             'labels'              => $labels,
             'supports'            => [ 'title', 'revisions', 'custom-fields' ],
             'hierarchical'        => true,
-            'public'              => false,
+            'public'              => true,
             'show_ui'             => true,
             'show_in_menu'        => false,
             'show_in_nav_menus'   => true,

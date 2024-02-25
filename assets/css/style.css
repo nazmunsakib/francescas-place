@@ -320,7 +320,6 @@ h4.fplace-total-price {
     text-align: left;
     width: 33.33%;
 }
-
 .fplace-wait-action{
     color: #fff;
     font-size: 15px;
@@ -335,4 +334,22 @@ h4.fplace-total-price {
 .fplace-wait-action:hover{
    background: #1f59b0;
    color: #fff;
+}
+.fplace-warning {
+    margin-top: 20px;
+    color: #1f59b0;
+    font-size: 15px;
+    text-decoration: underline;
+}
+.fplace-proposed-booking-form-container .gform_button {
+    color: #fff;
+    font-size: 15px;
+    background: #ed1c29 !important;
+    border: 1px solid #ed1c29 !important;
+    padding: 8px 15px !important;
+    border-radius: 30px;
+    margin-top: 30px;
+    transition: .4s;
+    cursor: pointer;
+    line-height: 18px;
 }

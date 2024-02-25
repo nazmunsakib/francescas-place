@@ -31,6 +31,7 @@ class Helper{
             'arriving_day'  => $arriving_day,
             'departing_date'=> $departing_date,
             'departing_day' => $departing_day,
+            'timestamp'     => $date_object
         ];
     }
     

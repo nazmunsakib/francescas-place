@@ -15,6 +15,8 @@ class Fplace_Admin{
     public function __construct(){
         add_action( "manage_fpb_booking_posts_custom_column", [$this, 'render_booking_columns'], 10, 2 );
         add_filter( "manage_fpb_booking_posts_columns", [$this, 'fplace_booking_columns'] );
+        add_action( "manage_fpb_wait_list_posts_custom_column", [$this, 'render_wait_list_columns'], 10, 2 );
+        add_filter( "manage_fpb_wait_list_posts_columns", [$this, 'fplace_wait_list_columns'] );
         add_filter('acf/load_field/name=booking_dates', [$this, 'flace_disable_dates_field'] );
         add_action( 'add_meta_boxes', [$this, 'fplace_add_meta_boxes'] );
         add_action('admin_menu', [$this, 'fplace_wait_list_submenu_of_booking'] );
@@ -40,7 +42,7 @@ class Fplace_Admin{
      * 
      * @return void
      */
-    function fplace_booking_columns( $columns ) {
+    public function fplace_booking_columns( $columns ) {
 
         $customColumns = array(
             'status'            => __( 'Status', 'fplace-booking' ),
@@ -64,7 +66,7 @@ class Fplace_Admin{
      * 
      * @return void
      */
-    function render_booking_columns( $column, $postId ) {
+    public function render_booking_columns( $column, $postId ) {
         $booking_date   = get_post_meta( $postId, 'booking_date', true );
         $room_id        = get_post_meta( $postId, 'room_id', true );
 
@@ -121,6 +123,56 @@ class Fplace_Admin{
     }
 
     /**
+     * Wait list columns
+     *
+     * @param $columns
+     * 
+     * @return void
+     */
+    public function fplace_wait_list_columns( $columns ) {
+
+        $customColumns = array(
+            'status'            => __( 'Status', 'fplace-booking' ),
+            'customer_info'     => __( 'Customer Info', 'fplace-booking' ),
+            'waiting_date'           => __( 'Wait date', 'fplace-booking' ),
+        );
+
+        $offset  = array_search( 'date', array_keys( $columns ) ); // Set custom columns position before "DATE" column
+        $columns = array_slice( $columns, 0, $offset, true ) + $customColumns + array_slice( $columns, $offset, count( $columns ) - 1, true );
+
+        return $columns;
+    }
+
+    /**
+     * Rander Booking custom columns
+     *
+     * @param $columns 
+     * @param $postId 
+     * 
+     * @return void
+     */
+    function render_wait_list_columns( $column, $postId ) {
+        switch ( $column ) {
+            case 'status':
+                $status     = get_post_meta( $postId, 'status', true );
+                echo "<p>{$status}</p>";
+                break;
+            case 'customer_info':
+                $customer_email     = get_post_meta( $postId, 'customer_email', true );
+                echo "<p><strong>Email</strong>: {$customer_email}</p>";
+                
+                break;
+            case 'waiting_date':
+                $arriving_date     = get_post_meta( $postId, 'arriving_date', true );
+                $departing_date     = get_post_meta( $postId, 'departing_date', true );
+                echo "<p><strong>Arriving</strong>: {$arriving_date}</p>";
+                echo "<p><strong>Departing</strong>: {$departing_date}</p>";
+
+                break;
+        }
+    }
+
+    /**
     * add meta box on booking
     * 
     * @return void
@@ -161,7 +213,6 @@ class Fplace_Admin{
             <p>Country: <?php echo esc_html( $customer_country ); ?></p>
             <p>Booking date: <?php echo esc_html( $booking_date ); ?></p>
             <p>Price: <?php echo esc_html( $price_total ); ?></p>
-
         </div>
         <?php
     }
@@ -190,7 +241,7 @@ class Fplace_Admin{
     public function booking_admin_order( $query ) {
         global $pagenow;
 
-        if( is_admin() && $pagenow == 'edit.php' && isset( $query->query['post_type'] ) && $query->query['post_type'] == 'fpb_booking' ) {
+        if( is_admin() && $pagenow == 'edit.php' && isset( $query->query['post_type'] ) && ( $query->query['post_type'] == 'fpb_booking' || $query->query['post_type'] == 'fpb_wait_list') ) {
             $query->set('orderby', 'date');
             $query->set('order', 'DESC');
         }

@@ -19,8 +19,11 @@ class Ajax_Actions{
         add_action('wp_ajax_cancel_booking', [$this, 'fplace_cancel_booking']);
         add_action('wp_ajax_nopriv_cancel_booking', [$this, 'fplace_cancel_booking'] );
 
-        add_action('wp_ajax_submit_wait_list_form', [$this, 'submit_wait_list_form'] );
-        add_action('wp_ajax_nopriv_submit_wait_list_form',  [$this, 'submit_wait_list_form'] );
+        add_action('wp_ajax_submit_wait_list', [$this, 'submit_wait_list_form'] );
+        add_action('wp_ajax_nopriv_submit_wait_list',  [$this, 'submit_wait_list_form'] );
+
+        add_action('wp_ajax_remove_wait_list', [$this, 'remove_from_wait_list'] );
+        add_action('wp_ajax_nopriv_remove_wait_list',  [$this, 'remove_from_wait_list'] );
     }
 
     /**
@@ -33,6 +36,8 @@ class Ajax_Actions{
         //compare date 
         $date_object    = strtotime(str_replace('/', '-', $date));
         $current_date   = strtotime(date('Y-m-d'));
+
+        check_ajax_referer('francescas_place_booking', 'nonce');
 
         if( empty( $date ) || $date_object < $current_date ) {
             echo "Sorry! this is the invalid request.";
@@ -202,10 +207,20 @@ class Ajax_Actions{
                 endwhile;
                 wp_reset_postdata();
             else :
+                $current_user = wp_get_current_user();
                 ?>
                 <div class="fplace-data-not-found">
                     <h3><?php _e('** Sorry - we don’t currently have any availability for these dates **', 'fplace-booking'); ?></h3>
-                    <a href="<?php echo esc_url( home_url('/wait-list') ); ?>/" class="fplace-red-btn" data-date="<?php echo $date ?>" data-customerId="<?php echo $user_id; ?>">Please put me on the accommodation cancellation wait list</a>
+
+                    <form id="wait-list-request-form">
+                        <div>
+                            <input type="hidden" id="waiting-date" value="<?php echo esc_attr( $date ); ?>">
+                            <input type="hidden" id="customer-id" value="<?php echo esc_attr( $user_id ); ?>">
+                            <input type="hidden" id="customer-email" value="<?php echo esc_attr( $current_user->user_email ); ?>">
+                            <input type="hidden" id="customer-name" value="<?php echo esc_attr( $current_user->display_name ); ?>">
+                        </div>
+                        <button type="submit" class="fplace-red-btn fplace-request-waitlist"><?php _e('Please put me on the accommodation cancellation wait list', 'fplace-booking'); ?></button>
+                    </form>
                 </div>
                 <?php
             endif;
@@ -228,6 +243,8 @@ class Ajax_Actions{
             die(0);
         }
 
+        check_ajax_referer('francescas_place_booking', 'nonce');
+
         /**
          * Update booking dates of room
          */
@@ -244,32 +261,75 @@ class Ajax_Actions{
         wp_die();
     }
 
-    public function submit_gravity_form_ajax() {
-
-        if (isset($_POST['form_id']) && is_numeric($_POST['form_id'])) {
-            $form_id = intval($_POST['form_id']);
-
-            check_ajax_referer('submit_gravity_form_nonce', 'security');
-
-            $form = GFAPI::get_form($form_id);
-            $entry = array(
-                'form_id' => $form_id,
-                'status' => 'active',
-            );
-
-            // Insert entry
-            $entry_id = GFAPI::add_entry($entry);
-
-            if (!is_wp_error($entry_id)) {
-                echo json_encode(array('success' => true, 'message' => 'Form submitted successfully.'));
-            } else {
-                echo json_encode(array('success' => false, 'message' => 'Failed to submit form.'));
-            }
-        } else {
-            echo json_encode(array('success' => false, 'message' => 'Invalid form ID.'));
+    /**
+     * Add waiting list
+     */
+    public function submit_wait_list_form() {
+        $date = (string)$_POST['get_date'] ?? '';
+        $user_id = intval( $_POST['user_id'] ) ?? '';
+        $customer_name = $_POST['customer_name'] ?? '';
+        $customer_email = $_POST['customer_email'] ?? '';
+        
+        if( empty( $date ) || empty( $customer_name ) ){
+                echo json_encode( array('success' => false, 'message' => 'error') );
+                wp_die();
         }
 
-        // Always exit to avoid further execution
+        $get_date = Helper::formattingDate($date);
+        $arriving_date  = $get_date['arriving_date']    ?? '';
+        $arriving_day   = $get_date['arriving_day']     ?? '';
+        $departing_date = $get_date['departing_date']   ?? '';
+        $departing_day  = $get_date['departing_day']    ?? '';
+
+        $post_data = array(
+            'post_title' => sanitize_text_field( $customer_name ) . " is waiting",
+            'post_type' => 'fpb_wait_list',
+            'post_status' => 'publish'
+        );
+
+        // Insert the post
+        $post_id = wp_insert_post( $post_data );
+
+        if ( $post_id && ! is_wp_error( $post_id ) ) {
+            $arriving       =   $arriving_day . ", " . $arriving_date;
+            $departing      =   $departing_day . ", " . $departing_date;
+            $waiting_date   =   $get_date['timestamp'] ?? '';
+
+            //send mail to admin
+            $admin_email = 'nazmun.sakib1042@gmail.com';
+            $subject = "Francesca's Place Wait list";
+            $message = $customer_name . " is waiting for booking cancellation";
+            wp_mail( $admin_email, $subject, $message );
+
+            //Set post meta 
+            update_post_meta( $post_id, 'arriving_date', $arriving );
+            update_post_meta( $post_id, 'departing_date', $departing );
+            update_post_meta( $post_id, 'waiting_date',  $waiting_date );
+            update_post_meta( $post_id, 'customer_email', $customer_email );
+            update_post_meta( $post_id, 'status', 'waiting');
+
+            echo json_encode( array('success' => true, 'post_id' => $post_id, 'message' => 'success' ) );
+        } else {
+            echo json_encode( array('success' => false, 'message' => 'error') );
+        }
+
+        wp_die();
+    }
+
+    /**
+     * Remove waiting list
+     */
+    public function remove_from_wait_list() {
+        $post_id = intval( $_POST['post_id'] ) ?? '';
+        
+        if( empty( $post_id ) ){
+            echo json_encode( array('success' => false, 'message' => 'Something Wrong' ) );
+            wp_die();
+        }
+
+        update_post_meta( $post_id, 'status', 'removed');
+        echo json_encode( array('success' => true, 'post_id' => $post_id, 'message' => 'Remove form wait' ) );
+
         wp_die();
     }
 

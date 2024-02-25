@@ -40,7 +40,11 @@ function fplace_booking_confirmation( $confirmation, $form, $entry, $ajax ) {
     if( $booking_id && $get_date ){
         fplace_get_booked( $booking_id, $get_date );
     }
-
+    ?>
+    <script type="text/javascript">
+        sessionStorage.removeItem('priceData');
+    </script>
+    <?php
     return $confirmation;
 }
 add_filter( 'gform_confirmation_1', 'fplace_booking_confirmation', 10, 4 );
