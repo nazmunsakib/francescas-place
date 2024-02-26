@@ -9,27 +9,6 @@ add_action( 'acf/include_fields', function() {
 	'title' => 'Room Information',
 	'fields' => array(
 		array(
-			'key' => 'field_65c6403e4925d',
-			'label' => 'Booking Dates',
-			'name' => 'booking_dates',
-			'aria-label' => '',
-			'type' => 'text',
-			'instructions' => 'The field is dynamically update base on booking!',
-			'required' => 0,
-			'conditional_logic' => 0,
-			'wrapper' => array(
-				'width' => '',
-				'class' => '',
-				'id' => '',
-			),
-			'default_value' => '',
-			'maxlength' => '',
-			'placeholder' => '',
-			'prepend' => '',
-			'append' => '',
-			'disabled' => 1,
-		),
-		array(
 			'key' => 'field_65cfb4e247c68',
 			'label' => 'Availability',
 			'name' => 'availability',
@@ -228,6 +207,27 @@ add_action( 'acf/include_fields', function() {
 			'prepend' => '',
 			'append' => '',
 		),
+		array(
+			'key' => 'field_65c6403e4925d',
+			'label' => 'Booking Dates',
+			'name' => 'booking_dates',
+			'aria-label' => '',
+			'type' => 'text',
+			'instructions' => 'The field is dynamically update base on booking! Please don\'t edit this field!',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array(
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+			'default_value' => '',
+			'maxlength' => '',
+			'placeholder' => '',
+			'prepend' => '',
+			'append' => '',
+			'disabled' => 0,
+		),
 	),
 	'location' => array(
 		array(
@@ -249,4 +249,5 @@ add_action( 'acf/include_fields', function() {
 	'show_in_rest' => 0,
 ) );
 } );
+
 

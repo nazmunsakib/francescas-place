@@ -31,7 +31,7 @@ class Fplace_Admin{
      * @return void
      */
     function flace_disable_dates_field( $field ) {
-        $field['disabled'] = 1;
+        $field['disabled'] = 0;
         return $field;
     }
 
