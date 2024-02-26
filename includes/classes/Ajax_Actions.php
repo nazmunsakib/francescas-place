@@ -321,7 +321,8 @@ class Ajax_Actions{
      * Remove waiting list
      */
     public function remove_from_wait_list() {
-        $post_id = intval( $_POST['post_id'] ) ?? '';
+        $post_id        = intval( $_POST['post_id'] ) ?? '';
+        $customer_email = $_POST['customer_email'] ?? '';
         
         if( empty( $post_id ) ){
             echo json_encode( array('success' => false, 'message' => 'Something Wrong' ) );

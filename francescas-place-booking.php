@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Francescas Place Booking
- * Description: Francescas Place Booking plugin!
+ * Plugin Name: Francesca's Place Booking
+ * Description: Francesca's Place Booking plugin!
  * Plugin URI: https://nazmunsakib.com/
- * Author: nazmunSakib
+ * Author: Nazmun Sakib
  * Version: 1.0.0
  * Author URI: https://nazmunsakib.com/
  * Text Domain: francescas-place

@@ -256,8 +256,8 @@
                     event.preventDefault();
                     if( remove ){
                         const post_id   = this.getAttribute('data-id');
-                        console.log( post_id );
-                        fPlaceWaitList( 'remove_wait_list', remove, null, null, null, null, post_id );
+                        const userEmail   = this.getAttribute('data-email');
+                        fPlaceWaitList( 'remove_wait_list', remove, null, null, null, userEmail, post_id );
                     }
 
                 });
@@ -275,7 +275,6 @@
 
                 if( true === getPrice.extra ){
                     priceField.value = getPrice.price + getPrice.extra_price;
-                    console.log( getPrice.price + getPrice.extra_price );
                 }
 
             }

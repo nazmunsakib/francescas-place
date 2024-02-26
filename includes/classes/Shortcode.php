@@ -182,11 +182,12 @@ confirmation email to confirm your booking has been successful.</p>
                                 $post_id = get_the_ID();
                                 $arriving_date  = get_post_meta(  $post_id, 'arriving_date', true) ?? '';
                                 $departing_date = get_post_meta(  $post_id, 'departing_date', true) ?? '';
+                                $current_user = wp_get_current_user();
                                 ?>
                                 <tr>
                                     <td><?php echo esc_html( $arriving_date ); ?></td>
                                     <td><?php echo esc_html( $departing_date ); ?></td>
-                                    <td><a href="" class="fplace-wait-action" data-id="<?php echo esc_attr( $post_id ); ?>"><?php _e('Remove', 'fplace-booking'); ?></a></td>
+                                    <td><a href="" class="fplace-wait-action" data-id="<?php echo esc_attr( $post_id ); ?>" data-email="<?php echo esc_attr( $current_user->user_email ); ?>"><?php _e('Remove', 'fplace-booking'); ?></a></td>
                                 </tr>
                                 <?php 
                             endwhile; 
