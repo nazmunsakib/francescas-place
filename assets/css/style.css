@@ -1,3 +1,29 @@
+/**
+* Check Availability
+*/
+.fplace-booking-main-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+.fplace-booking-container{
+    width: 100%;
+}
+#fplace-room-input {
+    width: 100%;
+    padding: 8px 15px;
+    border-radius: 5px;
+    background: #ffffff;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+}
+.search-form-wrapper {
+    display: flex;
+}
+.fplace-section-heading {
+    text-align: center;
+    margin-bottom: 25px;
+}
 #fplace-get-room-search, .fplace-red-btn{
     color: #fff;
     font-size: 20px;
@@ -13,6 +39,28 @@
    background: #1f59b0;
    color: #fff;
 }
+.fplace-room-search-area .ui-datepicker-trigger{
+    position: relative;
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin-left: 20px;
+    width: 50px;
+    font-size: 25px;
+    color: #666;
+    line-height: 45px;
+}
+.fplace-room-search-area .ui-datepicker-trigger:before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: "Font Awesome 5 Free";
+    content: "\f073";
+    font-weight: 900;
+}
+.fplace-room-search-area p {
+    margin-bottom: 0;
+}
 .fplace-data-not-found {
     text-align: center;
 }
@@ -23,26 +71,6 @@
 .fplace-data-not-found .fplace-red-btn {
     font-size: 18px;
 }
-
-#fplace-room-input {
-    width: 100%;
-    padding: 8px 15px;
-    border-radius: 5px;
-    background: #ffffff;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
-    border: 1px solid #ddd;
-}
-.fplace-section-heading {
-    text-align: center;
-    margin-bottom: 25px;
-}
-.fplace-booking-main-wrapper {
-    padding-bottom: 50px;
-    padding-top: 40px;
-}
-.fplace-room-search-area p {
-    margin-bottom: 0;
-}
 .fplace-arriving-departing {
     box-shadow: 0px 0px 30px 0px rgb(0 0 0 / 20%);
     background: #fff;
@@ -52,6 +80,113 @@
     border: .5px solid #888888;
     margin-top: 30px;
     margin-bottom: 30px;
+}
+
+/**
+* Availability Calendar
+*/
+.fplace-booking-datepicker .ui-datepicker-unselectable.ui-state-disabled {
+    opacity: 1 !important;
+}
+.fplace-booking-datepicker .ui-datepicker-unselectable .ui-state-default {
+    background: none !important;
+    border: none;
+}
+.fplace-booking-datepicker .ui-state-default {
+    font-size: 14px;
+    color: #666666 !important;
+    text-align: center !important;
+    padding: 8px !important;
+    margin: 5px 10px !important;
+}
+.fplace-booking-datepicker.ui-datepicker th {
+    padding: 5px !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    color: #666 !important;
+}
+.fplace-booking-datepicker.ui-datepicker {
+    background: #ffffff !important;
+    width: auto;
+}
+.fplace-booking-datepicker .ui-widget-header {
+    background: none;
+    border: none;
+    padding: 4px !important;
+}
+.fplace-booking-datepicker a.ui-state-default {
+    border-radius: 50%;
+    display: block;
+    line-height: 100%;
+    background-color: #ededed !important;
+}
+.fplace-booking-datepicker .ui-state-highlight{
+    background: #ededed !important;
+    border: 1px solid #c5c5c5 !important;
+}
+.fplace-booking-datepicker a.ui-state-default.ui-state-active {
+    background: #ed1c29 !important;
+    color: #fff !important;
+    border-color: #ed1c29 !important;
+}
+.fplace-booking-datepicker .ui-datepicker-month, .fplace-booking-datepicker .ui-datepicker-year {
+    border: none;
+    background: none;
+    font-size: 14px !important;
+    width: auto !important;
+    color: #666 !important;
+}
+.fplace-booking-datepicker .ui-datepicker-month{
+    margin-right: 20px !important;
+}
+.fplace-booking-datepicker .ui-datepicker-year{
+    margin-left: 20px !important;
+}
+
+.fplace-booking-datepicker .ui-datepicker-next, .fplace-booking-datepicker .ui-datepicker-prev{
+    border: none !important;
+    background: none !important;
+    padding: 0 !important;
+    opacity: 1 !important;
+}
+.fplace-booking-datepicker .ui-datepicker-next:before {
+    position: absolute;
+    font-family: "Font Awesome 5 Free";
+    content: "\f054";
+    font-weight: 900;
+    top: 8px !important;
+    font-size: 14px;
+    color: #666 !important;
+}
+.fplace-booking-datepicker .ui-datepicker-prev:before {
+    position: absolute;
+    font-family: "Font Awesome 5 Free";
+    content: "\f053";
+    font-weight: 900;
+    top: 8px !important;
+    font-size: 14px;
+    color: #666 !important;
+    left: 24px 
+}
+.fplace-booking-datepicker .ui-corner-all span.ui-icon {
+    display: none !important;
+}
+
+/**
+* Available room details
+*/
+.fplace-item-header {
+    padding: 10px 15px;
+    background: #1f59b0;
+    border-radius: 10px 10px 0 0;
+}
+.fplace-item-header h3 {
+    color: #fff;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 18px;
+    line-height: 27px;
+    font-weight: 600;
 }
 .fplace-query-date.departing{
     margin-bottom: 0px;
@@ -65,19 +200,6 @@
 .fplace-bold-text {
     font-weight: 600;
     margin-left: 10px;
-}
-.fplace-item-header {
-    padding: 10px 15px;
-    background: #1f59b0;
-    border-radius: 10px 10px 0 0;
-}
-.fplace-item-header h3 {
-    color: #fff;
-    margin-bottom: 0;
-    margin-top: 0;
-    font-size: 18px;
-    line-height: 27px;
-    font-weight: 600;
 }
 .fplace-proposed-booking-form-header{
     padding: 10px 15px;
@@ -189,34 +311,16 @@ h4.fplace-total-price {
     color: #666666;
     margin-bottom: 0;
 }
-#flace_loading {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    border: 5px solid #666;
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s ease-in-out infinite;
-    -webkit-animation: spin 1s ease-in-out infinite;
-}
-  
-@keyframes spin {
-    to { -webkit-transform: rotate(360deg); }
-}
-@-webkit-keyframes spin {
-    to { -webkit-transform: rotate(360deg); }
-}
-.fplace-loader {
-    text-align: center;
-    margin-top: 70px;
-    margin-bottom: 30px;
-}
+
+
+/**
+* Proposed booking details
+*/
 .fplace-booking-item {
     background: #ffffff;
     border: 1px solid #ddd;
     border-radius: 10px;
 }
-
 .fplace-proposed-booking-form {
     padding: 20px;
 }
@@ -234,28 +338,7 @@ h4.fplace-total-price {
     display: flex;
     justify-content: center;
 }
-.search-form-wrapper {
-    display: flex;
-}
-.fplace-room-search-area .ui-datepicker-trigger{
-    position: relative;
-    border: none;
-    background: none;
-    cursor: pointer;
-    margin-left: 20px;
-    width: 50px;
-    font-size: 25px;
-    color: #666;
-    line-height: 50px;
-}
-.fplace-room-search-area .ui-datepicker-trigger:before {
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-family: "Font Awesome 5 Free";
-    content: "\f073";
-    font-weight: 900;
-}
+
 .fplace-booking-info {
     margin: 0;
     padding: 0;
@@ -282,6 +365,27 @@ h4.fplace-total-price {
     font-size: 20px;
     color: #1f59b0;
 }
+.fplace-wait-action:hover{
+   background: #1f59b0;
+   color: #fff;
+}
+.fplace-proposed-booking-form-container .gform_button {
+    color: #fff;
+    font-size: 15px;
+    background: #ed1c29 !important;
+    border: 1px solid #ed1c29 !important;
+    padding: 8px 15px !important;
+    border-radius: 30px;
+    margin-top: 30px;
+    transition: .4s;
+    cursor: pointer;
+    line-height: 18px;
+}
+
+/**
+* Wait List
+*
+*/
 .fplace-accommodation-cancellation h3 {
     font-size: 20px;
     margin-bottom: 25px;
@@ -331,9 +435,31 @@ h4.fplace-total-price {
     transition: .4s;
     cursor: pointer;
 }
-.fplace-wait-action:hover{
-   background: #1f59b0;
-   color: #fff;
+
+/**
+* Ajax loader
+*
+*/
+#flace_loading {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #666;
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+}
+.fplace-loader {
+    text-align: center;
+    margin-top: 70px;
+    margin-bottom: 30px;
 }
 .fplace-warning {
     margin-top: 20px;
@@ -341,19 +467,10 @@ h4.fplace-total-price {
     font-size: 15px;
     text-decoration: underline;
 }
-.fplace-proposed-booking-form-container .gform_button {
-    color: #fff;
-    font-size: 15px;
-    background: #ed1c29 !important;
-    border: 1px solid #ed1c29 !important;
-    padding: 8px 15px !important;
-    border-radius: 30px;
-    margin-top: 30px;
-    transition: .4s;
-    cursor: pointer;
-    line-height: 18px;
-}
 
+/**
+* Responsive loader
+*/
 @media only screen and (max-width: 767px) {
     .fplace-room-info-wrapper {
         flex-direction: column;

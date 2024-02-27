@@ -139,7 +139,7 @@ final class Francescas_Place {
 			'francescas-place-booking',
 			FPB_ASSETS . 'js/scripts.js',
 			['jquery'],
-			'1.0',
+			time(),
 			true
 		);
 

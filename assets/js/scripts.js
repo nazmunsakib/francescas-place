@@ -194,8 +194,22 @@
             $( "#fplace-room-input" ).datepicker({
                 showOn: "button",
                 dateFormat: 'dd/mm/yy',
-                showButtonPanel: true,
-                buttonText: ' '
+                buttonText: ' ',
+                changeMonth: true,
+                changeYear: true,
+                minDate: 0,
+                showAnim: 'slideDown',
+                nextText: 'text',
+                prevText: 'prev',
+                beforeShow: function(input, instance) {
+                    setTimeout(function() {
+                        $(instance.dpDiv).addClass('fplace-booking-datepicker');
+                    }, 0);
+                }
+            });
+
+            $( "#fplace-room-input" ).focus(function() {
+                $(this).datepicker('show');
             });
         }
 
