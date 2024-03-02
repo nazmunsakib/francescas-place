@@ -60,25 +60,25 @@ add_filter( 'gform_confirmation_'.$fPb_formId.'', 'fplace_booking_confirmation',
 function fplace_populate_room_title( $form ) {
     $booking_id     = isset( $_GET['booking'] ) ? intval($_GET['booking']) : null;
     $room_title     = get_the_title( $booking_id );
+    $customer_meta  = '';
     $first_name     = '';
     $last_name      = '';
     $customer_email = '';
-
+    
     if( $booking_id && $room_title ){
         $customer = wp_get_current_user();
         if ( $customer instanceof WP_User ) {
             $first_name     = $customer->first_name;
             $last_name      = $customer->last_name;
             $customer_email = $customer->user_email;
+            $customer_meta  = get_user_meta( $customer->ID );
         }
-
         foreach ( $form['fields'] as &$field ) {
             if ($field->type == 'name' && $field->id == 2 ) {
                 if( isset(  $field->inputs[1]['defaultValue'] ) ){
                     $field->inputs[1]['defaultValue'] =  esc_html( $first_name . " " . $last_name ); 
                 }
             }
-
             if ( $field->id == '10' ) {
                 $field->defaultValue =  $customer_email;
             }
@@ -86,7 +86,31 @@ function fplace_populate_room_title( $form ) {
             if ( $field->id == '15' ) {
                 $field->defaultValue =  $room_title;
             }
-
+            
+            if ( $field->id == '6' && isset( $customer_meta['baid'] ) ) {
+                $baid = $customer_meta['baid'][0] ?? '';
+                $field->defaultValue =  $baid;
+            }
+            
+            if ( $field->id == '8' && isset( $customer_meta['mobile'] ) ) {
+                $mobile = $customer_meta['mobile'][0] ?? '';
+                $field->defaultValue = $mobile;
+            }
+            
+            if ($field->type == 'address' && $field->id == 7 ) {
+                if( isset(  $field->inputs[0]['defaultValue'] ) && isset( $customer_meta['address1'] ) ){
+                    $address1 = $customer_meta['address1'][0] ?? '';
+                    $field->inputs[1]['defaultValue'] =  $address1; 
+                }
+                if( isset(  $field->inputs[1]['defaultValue'] ) && isset( $customer_meta['address2'] ) ){
+                    $address2 = $customer_meta['address2'][0] ?? '';
+                    $field->inputs[2]['defaultValue'] =  $address2; 
+                }
+                if( isset( $field->inputs[2]['defaultValue'] ) && isset( $customer_meta['city'] ) ){
+                    $city = $customer_meta['city'][0] ?? '';
+                    $field->inputs[3]['defaultValue'] =  $city; 
+                }
+            }
         }
     }
 

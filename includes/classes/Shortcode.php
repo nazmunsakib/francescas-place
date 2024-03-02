@@ -14,10 +14,12 @@ class Shortcode{
     public function __construct(){
         add_shortcode('fpalace_booking', array( $this,'fpalace_booking') );
         add_shortcode('wait_list', array( $this,'fpalace_wait_list') );
+        add_shortcode('manage_booking', array( $this,'fpalace_manage_booking') );
     }
 
     public function fpalace_booking( $atts, $content = null ){
         if( ! is_user_logged_in() ){
+            echo '<section class="fplace-booking-main-wrapper"><a href="'.site_url('/').'login/" class="fplace-red-btn">Please Log In to Access This Feature</a></div>';
             return $content;
         }
 
@@ -26,6 +28,7 @@ class Shortcode{
         $booking_id = isset( $_GET['booking'] ) ? intval( $_GET['booking'] ) : null;
         $date       = isset( $_GET['date'] ) ? (string)$_GET['date'] : null;
         $userId     = get_current_user_id();
+        $fPb_formId = get_option('booking_form_id') ?? 1;
         ?>
         <section class="fplace-booking-main-wrapper">
             <?php 
@@ -96,7 +99,7 @@ class Shortcode{
                                     <h4><?php _e('Required Booking Information', 'fplace-booking'); ?></h4>
                                 </div>
                                 <div class="fplace-proposed-booking-form-container">
-                                    <?php echo do_shortcode('[gravityform id="1" title="false" description="false" ajax="true"]'); ?>
+                                    <?php echo do_shortcode('[gravityform id="'.$fPb_formId.'" title="false" description="false" ajax="true"]'); ?>
                                 </div>
                             </div>
                         </div>
@@ -133,6 +136,7 @@ class Shortcode{
 
     public function fpalace_wait_list( $atts, $content = null ){
         if( ! is_user_logged_in() ){
+            echo '<section class="fplace-accommodation-cancellation-section"><a href="'.site_url('/').'login/" class="fplace-red-btn">Please Log In to Access This Feature</a></div>';
             return $content;
         }
 
@@ -196,6 +200,87 @@ confirmation email to confirm your booking has been successful.</p>
                         ?>
                         <tr>
                             <td><?php _e('No wait list found for you!'); ?></td>
+                        </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <?php
+        return ob_get_clean();
+    }
+
+    public function fpalace_manage_booking( $atts, $content = null ){
+        if( ! is_user_logged_in() ){
+            echo '<section class="fplace-accommodation-cancellation-section"><a href="'.site_url('/').'login/" class="fplace-red-btn">Please Log In to Access This Feature</a></div>';
+            return $content;
+        }
+
+        ob_start();
+
+        $userId    = get_current_user_id();
+        $current_date = date('Y-m-d');
+        
+        $args = array(
+            'author'            => $userId,
+            'posts_per_page'    => -1,
+            'post_type'         => 'fpb_booking',
+            'post_status'       => 'publish',
+            'meta_query'        => array(
+                array(
+                    'key'       => 'booking_status',
+                    'value'     => 'Active',
+                    'compare'   => '=',
+                )
+            )
+        );
+        
+        $the_query = new \WP_Query( $args );
+        ?>
+        <section class="fplace-accommodation-cancellation-section fplace-manage-booking">
+            <div class="fplace-accommodation-cancellation">
+                <h2><?php _e('Manage Your Booking', 'fplace-booking'); ?></h2>
+            </div>
+            <div class="fplace-wait-list-wrapper">
+                <table class="fplace-wait-list-table">
+                    <thead>
+                        <tr>
+                            <th><?php _e('Room', 'fplace-booking'); ?></th>
+                            <th><?php _e('Date', 'fplace-booking'); ?></th>
+                            <th><?php _e('Action', 'fplace-booking'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ( $the_query->have_posts() ) :             
+                            while ( $the_query->have_posts() ) :
+                                $the_query->the_post();
+                                $post_id        = get_the_ID();
+                                $booking_date   = get_post_meta( $post_id, 'booking_date', true );
+                                $room_id        = get_post_meta( $post_id, 'room_id', true );
+                                $current_user   = wp_get_current_user();
+
+                                $get_date = Helper::formattingDate( $booking_date );
+                                $arriving_date  = $get_date['arriving_date']    ?? '';
+                                $arriving_day   = $get_date['arriving_day']     ?? '';
+                                $departing_date = $get_date['departing_date']   ?? '';
+                                $departing_day  = $get_date['departing_day']    ?? '';
+                                ?>
+                                <tr>
+                                    <td><?php echo get_the_title(); ?></td>
+                                    <td>
+                                        <?php echo 'Arriving: ' . $arriving_day . ", " . $arriving_date; ?></br>
+                                        <?php echo 'Departing: ' . $departing_day . ", " . $departing_date; ?>
+                                    </td>
+                                    <td><a href="" class="fplace-customer-booking-cancel"  data-customerEmail="<?php echo esc_attr( $current_user->user_email ); ?>" data-bookedId='<?php echo esc_attr( $post_id ); ?>' data-bookingDate='<?php echo esc_attr( $booking_date ); ?>' data-roomId='<?php echo esc_attr( $room_id ); ?>'><?php _e('Cancel', 'fplace-booking'); ?></a></td>
+                                </tr>
+                                <?php 
+                            endwhile; 
+                            wp_reset_postdata();
+                        else :
+                        ?>
+                        <tr>
+                            <td><?php _e('No Booking found for you!'); ?></td>
                         </tr>
                         <?php endif; ?>
                     </tbody>

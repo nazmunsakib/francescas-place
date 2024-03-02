@@ -24,6 +24,9 @@ class Ajax_Actions{
 
         add_action('wp_ajax_remove_wait_list', [$this, 'remove_from_wait_list'] );
         add_action('wp_ajax_nopriv_remove_wait_list',  [$this, 'remove_from_wait_list'] );
+
+        add_action('wp_ajax_cancel_booking_customer', [$this, 'fplace_cancel_booking_customer'] );
+        add_action('wp_ajax_nopriv_cancel_booking_customer',  [$this, 'fplace_cancel_booking_customer'] );
     }
 
     /**
@@ -257,6 +260,39 @@ class Ajax_Actions{
          */
         update_post_meta( $booked_id, 'booking_status', 'Canceled');
         echo "<p style='color:red'><strong>Canceled</strong></p>";
+
+        wp_die();
+    }
+
+    /**
+     * Get cancel booking
+     */
+    public function fplace_cancel_booking_customer(){
+        $date       = (string)$_POST['get_date'] ?? '';
+        $booked_id  = $_POST['booked_id'] ? intval( $_POST['booked_id'] ) : '';
+        $room_id    = $_POST['room_id'] ? intval( $_POST['room_id'] ) : '';
+        $email      = $_POST['customer_email'] ? intval( $_POST['customer_email'] ) : '';
+
+        if( empty( $date ) || empty( $booked_id ) ){
+            echo "Sorry this is the invalid request";
+            die(0);
+        }
+
+        check_ajax_referer('francescas_place_booking', 'nonce');
+
+        /**
+         * Update booking dates of room
+         */
+        $booking_dates      = get_field( 'booking_dates', $room_id );
+        $new_booking_dates  = str_replace( $date .",", "", $booking_dates );
+        update_field( 'booking_dates', $new_booking_dates, $room_id );
+
+        /**
+         * Canceled booking
+         */
+        update_post_meta( $booked_id, 'booking_status', 'Canceled');
+
+        echo "Successfully cancel the booking";
 
         wp_die();
     }

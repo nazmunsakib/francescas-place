@@ -3,8 +3,8 @@
 */
 .fplace-booking-main-wrapper {
     min-height: 100vh;
-    display: flex;
-    align-items: center;
+    padding-top: 50px;
+    padding-bottom: 40px;
 }
 .fplace-booking-container{
     width: 100%;
@@ -365,7 +365,7 @@ h4.fplace-total-price {
     font-size: 20px;
     color: #1f59b0;
 }
-.fplace-wait-action:hover{
+.fplace-wait-action:hover, .fplace-customer-booking-cancel:hover {
    background: #1f59b0;
    color: #fff;
 }
@@ -424,7 +424,7 @@ h4.fplace-total-price {
     text-align: left;
     width: 33.33%;
 }
-.fplace-wait-action{
+.fplace-wait-action, .fplace-customer-booking-cancel{
     color: #fff;
     font-size: 15px;
     background: #ed1c29;
@@ -466,6 +466,38 @@ h4.fplace-total-price {
     color: #1f59b0;
     font-size: 15px;
     text-decoration: underline;
+}
+
+/**
+* Login form design
+*/
+#gform_fields_login {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+#gform_fields_login .gfield {
+    width: 48% !important;
+}
+#gform_fields_login .gfield input[type=text], #gform_fields_login .gfield input[type=password] {
+    width: 100% !important;
+    padding: 10px;
+    border-radius: 5px;
+}
+#gform_fields_login .gfield_label {
+    font-weight: 400;
+}
+.gf_login_form .gform_button {
+    color: #fff;
+    font-size: 15px;
+    background: #ed1c29 !important;
+    border: 1px solid #ed1c29 !important;
+    padding: 8px 25px !important;
+    border-radius: 30px;
+    margin-top: 20px;
+    transition: .4s;
+    cursor: pointer;
+    line-height: 18px;
 }
 
 /**

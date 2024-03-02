@@ -18,7 +18,6 @@ class Fplace_Admin{
         add_action( "manage_fpb_wait_list_posts_custom_column", [$this, 'render_wait_list_columns'], 10, 2 );
         add_filter( "manage_fpb_wait_list_posts_columns", [$this, 'fplace_wait_list_columns'] );
         add_filter('acf/load_field/name=booking_dates', [$this, 'flace_disable_dates_field'] );
-        add_action( 'add_meta_boxes', [$this, 'fplace_add_meta_boxes'] );
         add_action('admin_menu', [$this, 'fplace_wait_list_submenu_of_booking'] );
         add_action('pre_get_posts', [$this,'booking_admin_order'] );
     }
@@ -174,51 +173,6 @@ class Fplace_Admin{
 
                 break;
         }
-    }
-
-    /**
-    * add meta box on booking
-    * 
-    * @return void
-    */
-    public function fplace_add_meta_boxes() {
-        add_meta_box( 'fplace-booking-details', __( 'Booking details', 'francescas-place' ), array( $this, 'fplace_booking_details' ), 'fpb_booking' );
-    }
-    
-    /**
-    * render meta box on booking
-    * 
-    * @return void
-    */
-    public function fplace_booking_details() {
-        $postId             = get_the_ID();
-        $baid               = get_post_meta( $postId, 'customer_ba_id', true );
-        $booking_date       = get_post_meta( $postId, 'booking_date', true );
-        $price_total        = get_post_meta( $postId, 'price_total', true );
-        $customer_name      = get_post_meta( $postId, 'customer_name', true );
-        $customer_phone     = get_post_meta( $postId, 'customer_phone', true );
-        $customer_email     = get_post_meta( $postId, 'customer_email', true );
-        $customer_tel       = get_post_meta( $postId, 'customer_tel', true );
-        $address_line_1     = get_post_meta( $postId, 'customer_address_line_1', true );
-        $address_line_2     = get_post_meta( $postId, 'customer_address_line_1', true );
-        $customer_postcode  = get_post_meta( $postId, 'customer_postcode', true );
-        $customer_country   = get_post_meta( $postId, 'customer_country', true );
-        $customer_town_city = get_post_meta( $postId, 'customer_town_city', true );
-        ?>
-        <div class="fplace-booking-details">
-            <p>Name: <?php echo esc_html( $customer_name ); ?></p>
-            <p>BA ID: <?php echo esc_html( $baid ); ?></p>
-            <p>Phone: <?php echo esc_html( $customer_phone ); ?></p>
-            <p>Tel: <?php echo esc_html( $customer_tel ); ?></p>
-            <p>Email: <?php echo esc_html($customer_email ); ?></p>
-            <p>Address: <?php echo esc_html( $address_line_1 . ", " . $address_line_2 ); ?></p>
-            <p>Postcode: <?php echo esc_html( $customer_postcode ); ?></p>
-            <p>City: <?php echo esc_html( $customer_town_city ); ?></p>
-            <p>Country: <?php echo esc_html( $customer_country ); ?></p>
-            <p>Booking date: <?php echo esc_html( $booking_date ); ?></p>
-            <p>Price: <?php echo esc_html( $price_total ); ?></p>
-        </div>
-        <?php
     }
 
     /**

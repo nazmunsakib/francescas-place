@@ -22,6 +22,7 @@
         userId ? data.user_id   = userId : null;
         selector.getAttribute('data-bookedId')  ? data.booked_id    = selector.getAttribute('data-bookedId') : null;
         selector.getAttribute('data-roomId')    ? data.room_id      = selector.getAttribute('data-roomId') : null;
+        selector.getAttribute('data-customerEmail')    ? data.customer_email  = selector.getAttribute('data-customerEmail') : null;
 
         $.ajax({
             type: "POST",
@@ -29,7 +30,7 @@
             url: fPlace.ajax_url,
             data: data,
             beforeSend : function ( xhr ) {
-                if( 'cancel_booking' === action ){
+                if( 'cancel_booking' === action || 'cancel_booking_customer' === action ){
                     selector.innerHTML = '<span>...</span>';
                 }else{
                     selector.innerHTML = loader();
@@ -39,6 +40,12 @@
                 if( response ){
                     if( 'cancel_booking' === action ){
                         selector.parentElement.innerHTML = response;
+                    }else if( 'cancel_booking_customer' === action  ){
+                        let targetParent = selector.parentElement;
+                        let getRow = targetParent.parentElement;
+                        if( getRow ){
+                            getRow.remove();
+                        }
                     }else{
                         selector.innerHTML = response;
                         fPlaceGetPrice();
@@ -180,12 +187,13 @@
         const searchResult      = document.getElementById('fplace-search-result-container');
         const searchWrap        = document.getElementById('fplace-room-input');
         const searchButton      = document.getElementById('fplace-get-room-search');
-        const cancelBooking     = document.getElementsByClassName('fplace-cancel-booking');
-        const priceField        = document.querySelector('.fplace-proposed-booking-form-container #input_1_16');
+        const priceField        = document.querySelector(`.fplace-proposed-booking-form-container #input_${fPlace.from_id}_16`);
         const proposedExPrice   = document.querySelector('.fplace-proposed-extra-price');
         const proposedPrice     = document.querySelector('.fplace-proposed-total-amount');
         const requestWaitList   = document.querySelector('.fplace-request-waitlist');
         const removeWaitList    = document.getElementsByClassName('fplace-wait-action');
+        const cancelAdminBooking     = document.getElementsByClassName('fplace-cancel-booking');
+        const cancelCustomerBooking  = document.getElementsByClassName('fplace-customer-booking-cancel');
 
         /**
          * Search datepicker
@@ -230,14 +238,31 @@
         /**
          * Cancel Booking
          */
-        if( cancelBooking.length > 0 ){
-            for( let cancel of cancelBooking ){
+        if( cancelAdminBooking.length > 0 ){
+            for( let cancel of cancelAdminBooking ){
                 cancel.addEventListener('click', function( event ){
                     event.preventDefault();
 
                     if( cancel ){
                         const getDate   = this.getAttribute('data-bookingdate');
                         fPlaceActions( cancel, 'cancel_booking', getDate);
+                    }
+
+                });
+            }
+        }
+
+        /**
+         * Cancel Booking from customer
+         */
+        if( cancelCustomerBooking.length > 0 ){
+            for( let cancel of cancelCustomerBooking ){
+                cancel.addEventListener('click', function( event ){
+                    event.preventDefault();
+
+                    if( cancel ){
+                        const getDate   = this.getAttribute('data-bookingdate');
+                        fPlaceActions( cancel, 'cancel_booking_customer', getDate);
                     }
 
                 });
