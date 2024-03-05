@@ -338,7 +338,6 @@ h4.fplace-total-price {
     display: flex;
     justify-content: center;
 }
-
 .fplace-booking-info {
     margin: 0;
     padding: 0;
@@ -381,6 +380,18 @@ h4.fplace-total-price {
     cursor: pointer;
     line-height: 18px;
 }
+.fplace-proposed-booking-form-container .gform_confirmation_message {
+    margin-top: 60px;
+    margin-bottom: 30px;
+}
+.fplace-booking-item {
+    min-height: 90vh;
+}
+input.fplace_proposed_extra_price_check {
+    pointer-events: none;
+}
+
+
 
 /**
 * Wait List
@@ -424,7 +435,7 @@ h4.fplace-total-price {
     text-align: left;
     width: 33.33%;
 }
-.fplace-wait-action, .fplace-customer-booking-cancel{
+.fplace-wait-action, .fplace-customer-booking-cancel, .fplace-return-to-home-btn{
     color: #fff;
     font-size: 15px;
     background: #ed1c29;

@@ -79,6 +79,7 @@ function fplace_populate_room_title( $form ) {
                     $field->inputs[1]['defaultValue'] =  esc_html( $first_name . " " . $last_name ); 
                 }
             }
+
             if ( $field->id == '10' ) {
                 $field->defaultValue =  $customer_email;
             }
@@ -87,8 +88,8 @@ function fplace_populate_room_title( $form ) {
                 $field->defaultValue =  $room_title;
             }
             
-            if ( $field->id == '6' && isset( $customer_meta['baid'] ) ) {
-                $baid = $customer_meta['baid'][0] ?? '';
+            if ( $field->id == '6' && isset( $customer_meta['ba_id'] ) ) {
+                $baid = $customer_meta['ba_id'][0] ?? '';
                 $field->defaultValue =  $baid;
             }
             
@@ -96,6 +97,12 @@ function fplace_populate_room_title( $form ) {
                 $mobile = $customer_meta['mobile'][0] ?? '';
                 $field->defaultValue = $mobile;
             }
+
+            if ( $field->id == '9' && isset( $customer_meta['tel'] ) ) {
+                $tel = $customer_meta['tel'][0] ?? '';
+                $field->defaultValue = $tel;
+            }
+
             
             if ($field->type == 'address' && $field->id == 7 ) {
                 if( isset(  $field->inputs[0]['defaultValue'] ) && isset( $customer_meta['address1'] ) ){
